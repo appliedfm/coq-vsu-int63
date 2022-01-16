@@ -17,6 +17,7 @@ SHA256SUM=sha256sum
 
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 COQLIBINSTALL=$(COQLIB)/user-contrib
+C_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 CLIGHTGEN64?=$(COQLIB)/../../bin/clightgen
 CLIGHTGEN32?=$(COQLIB)/../../variants/compcert32/bin/clightgen
@@ -30,8 +31,7 @@ else ifeq ($(BITSIZE),32)
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
 
-BASE_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
-COQ_INSTALL_DIR?=$(BASE_INSTALL_DIR)/$(PROJECT)
+COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)/$(PROJECT)
 
 TARGET=x86_64-linux
 ifeq ($(BITSIZE),32)
@@ -40,7 +40,7 @@ endif
 
 
 ifeq ($(SRC),opam)
-	C_ROOT?=$(BASE_INSTALL_DIR)
+	C_ROOT?=$(C_INSTALL_DIR)
 else
 	C_ROOT?=src/c
 endif
@@ -96,9 +96,9 @@ C_SOURCES= \
 	$(shell find src/c -name "*.h" | cut -d'/' -f3-)
 
 install-src:
-	install -d "$(BASE_INSTALL_DIR)"
-	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(BASE_INSTALL_DIR)/$$d"; done
-	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(BASE_INSTALL_DIR)/$$(dirname $$f)"; done
+	install -d "$(C_INSTALL_DIR)"
+	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(C_INSTALL_DIR)/$$d"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-) \
