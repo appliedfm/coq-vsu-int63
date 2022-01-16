@@ -17,20 +17,18 @@ SHA256SUM=sha256sum
 
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 COQLIBINSTALL=$(COQLIB)/user-contrib
-C_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 CLIGHTGEN64?=$(COQLIB)/../../bin/clightgen
 CLIGHTGEN32?=$(COQLIB)/../../variants/compcert32/bin/clightgen
 
-ifeq ($(BITSIZE),64)
-	COMPCERT_DIR=$(COQLIB)/user-contrib/compcert
-	VST_DIR=$(COQLIB)/user-contrib/VST
+ifeq ($(BITSIZE),64) # This is an alias for BITSIZE=opam
 else ifeq ($(BITSIZE),32)
 	COQLIBINSTALL=$(COQLIB)/../coq-variant/
 	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
 
+C_INSTALL_DIR=$(COQLIB)/../$(PUBLISHER)
 COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)/$(PROJECT)
 
 TARGET=x86_64-linux
@@ -101,18 +99,18 @@ install-src:
 	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
-	$(shell find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-) \
-	$(shell find theories/$(PROJECT)/vst/ast -name "*.v" | cut -d'/' -f1-) \
-	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET) -name "*.v" | cut -d'/' -f1-) \
-	$(shell find theories/$(PROJECT)/vst/proof -name "*.v" | cut -d'/' -f1-) \
-	$(shell find theories/$(PROJECT)/vst/spec -name "*.v" | cut -d'/' -f1-)
+	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f3-)
 
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 
 install-vst: theories
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
-	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 $$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
+	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 
 install: install-src install-vst
 

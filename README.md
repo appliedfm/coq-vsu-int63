@@ -25,7 +25,7 @@ The general pattern looks like this:
 
 ```console
 $ make [verydeepclean|deepclean|clean]
-$ make BITSIZE={opam|64|32} [COQLIBINSTALL=prefix] [all|theories|install|install-src|install-vst]
+$ make BITSIZE={opam|64|32} [all|theories|install|install-src|install-vst]
 ```
 
 `BITSIZE` determines which `compcert` target to use:
