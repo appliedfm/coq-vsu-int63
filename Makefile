@@ -29,7 +29,7 @@ else ifeq ($(BITSIZE),32)
 endif
 
 C_INSTALL_DIR=$(COQLIB)/../$(PUBLISHER)
-COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)/$(PROJECT)
+COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 TARGET=x86_64-linux
 ifeq ($(BITSIZE),32)
@@ -99,11 +99,11 @@ install-src:
 	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
-	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-) \
-	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f3-) \
-	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f3-) \
-	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f3-) \
-	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f3-)
+	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f2-) \
+	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f2-) \
+	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f2-) \
+	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f2-) \
+	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f2-)
 
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 
