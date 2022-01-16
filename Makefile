@@ -24,7 +24,6 @@ ifeq ($(BITSIZE),64)
 	COMPCERT_DIR=$(COQLIB)/user-contrib/compcert
 	VST_DIR=$(COQLIB)/user-contrib/VST
 else ifeq ($(BITSIZE),32)
-	CLIGHTGEN=$(COQLIB)/../../variants/compcert32/bin/clightgen
 	COQLIBINSTALL=$(COQLIB)/../coq-variant/$(PROJECT)-32
 	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
@@ -38,13 +37,19 @@ ifeq ($(BITSIZE),32)
 endif
 
 
+C_ROOT?=src/c
+ifeq ($(C_ROOT),"")
+	C_ROOT=$(COQLIB)/user-contrib/$(PROJECT)
+endif
+
+
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v: \
-	src/c/include/coq-vst-int63/src/int63.c \
-	src/c/include/coq-vst-int63/int63.h
+	$(C_ROOT)/include/coq-vst-int63/src/int63.c \
+	$(C_ROOT)/include/coq-vst-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v: \
-	src/c/include/coq-vst-int63/src/int63.c \
-	src/c/include/coq-vst-int63/int63.h
+	$(C_ROOT)/include/coq-vst-int63/src/int63.c \
+	$(C_ROOT)/include/coq-vst-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`
@@ -81,9 +86,16 @@ theories: Makefile.coq
 	$(MAKE) -f Makefile.coq -j$(J)
 
 
+.PHONY: install install-src install-vst
+
 C_SOURCES= \
 	$(shell find src/c -name "*.c" | cut -d'/' -f3-) \
 	$(shell find src/c -name "*.h" | cut -d'/' -f3-)
+
+install-src:
+	install -d "$(INSTALLDIR)"
+	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(INSTALLDIR)/$$d"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(INSTALLDIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-) \
@@ -93,13 +105,6 @@ COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/vst/spec -name "*.v" | cut -d'/' -f1-)
 
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
-
-.PHONY: install install-src install-vst
-
-install-src:
-	install -d "$(INSTALLDIR)"
-	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(INSTALLDIR)/$$d"; done
-	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(INSTALLDIR)/$$(dirname $$f)"; done
 
 install-vst: theories
 	install -d "$(INSTALLDIR)"
