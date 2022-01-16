@@ -8,9 +8,9 @@ Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/).
 
 ## Packages
 
-* `coq-veric-int63-src.opam` - C source code
-* `coq-veric-int63-vst.opam` - VST model, spec, and proof (`x86_64-linux`)
-* `coq-veric-int63-vst-32.opam` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-veric-int63-src` - C source code
+* `coq-veric-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
+* `coq-veric-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
 
 ## Installing
 

@@ -29,3 +29,7 @@ jobs:
         with:
           custom_image: ${{ matrix.image }}
           opam_file: ${{ matrix.opam_file }}
+          before_install: |
+            startGroup "opam pin"
+              opam pin -n -y .
+            endGroup
