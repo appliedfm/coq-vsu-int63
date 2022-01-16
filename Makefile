@@ -37,9 +37,10 @@ ifeq ($(BITSIZE),32)
 endif
 
 
-C_ROOT?=src/c
-ifeq ($(C_ROOT),"")
-	C_ROOT=$(COQLIB)/user-contrib/$(PROJECT)
+ifeq ($(SRC),opam)
+	C_ROOT?=$(COQLIB)/user-contrib/$(PROJECT)
+else
+	C_ROOT?=src/c
 endif
 
 
