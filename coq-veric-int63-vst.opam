@@ -8,16 +8,17 @@ bug-reports: "https://github.com/appliedfm/coq-vst-int63/issues"
 license: "https://github.com/appliedfm/coq-vst-int63/blob/main/LICENSE"
 authors: ["Tim Carstens" "appliedfm"]
 build: [
-    [make "deepclean"]
-    [make "BITSIZE=32" "J=%{jobs}%"]
+    [make "verydeepclean"]
+    [make "BITSIZE=64" "J=%{jobs}%"]
 ]
 install: [
-    make "BITSIZE=32" "install"
+    make "BITSIZE=64" "install-vst"
 ]
 depends: [
     "coq" {>= "8.13.2"}
     "coq-compcert" {>= "3.9"}
     "coq-vst" {>= "2.8"}
+    "coq-veric-int63-src" {= version}
 ]
 synopsis: "Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq"
 description: """Int63

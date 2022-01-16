@@ -719,3 +719,9 @@ Definition prog : Clight.program :=
   mkprogram composites global_definitions public_idents _main Logic.I.
 
 
+(*
+Input hashes (sha256):
+
+a45642c62490c53adf82ceaac62eb109a90857bef237d2335b733d666018accd  src/c/include/coq-vst-int63/src/int63.c
+821b3952f2f106ef9d453562b04fa9bc810960deb1f9609be28504fee2630379  src/c/include/coq-vst-int63/int63.h
+*)

@@ -1,11 +1,11 @@
 # x86_64-linux
--Q theories/Int63/model Int63.model
--Q theories/Int63/c/ast Int63.c.ast
--Q theories/Int63/c/clightgen/x86_64-linux Int63.c.clightgen
--Q theories/Int63/c/proof Int63.c.proof
--Q theories/Int63/c/spec Int63.c.spec
+-Q theories/Int63/model                      Int63.model
+-Q theories/Int63/vst/ast                    Int63.vst.ast
+-Q theories/Int63/vst/clightgen/x86_64-linux    Int63.vst.clightgen
+-Q theories/Int63/vst/proof                  Int63.vst.proof
+-Q theories/Int63/vst/spec                   Int63.vst.spec
 theories/Int63/model/int63.v
-theories/Int63/c/ast/ast.v
-theories/Int63/c/clightgen/x86_64-linux/int63.v
-theories/Int63/c/proof/proof.v
-theories/Int63/c/spec/spec.v
+theories/Int63/vst/ast/ast.v
+theories/Int63/vst/clightgen/x86_64-linux/int63.v
+theories/Int63/vst/proof/proof.v
+theories/Int63/vst/spec/spec.v

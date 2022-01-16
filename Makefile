@@ -9,6 +9,7 @@ all: theories
 J?=4
 BITSIZE?=opam
 COQC?=coqc
+SHA256SUM=sha256sum
 
 -include CONFIGURE
 
@@ -37,37 +38,40 @@ ifeq ($(BITSIZE),32)
 endif
 
 
-theories/$(PROJECT)/c/clightgen/x86_64-linux/int63.v: \
+theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v: \
 	src/c/include/coq-vst-int63/src/int63.c \
 	src/c/include/coq-vst-int63/int63.h
 
-theories/$(PROJECT)/c/clightgen/x86_32-linux/int63.v: \
+theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v: \
 	src/c/include/coq-vst-int63/src/int63.c \
 	src/c/include/coq-vst-int63/int63.h
 
-theories/$(PROJECT)/c/clightgen/x86_64-linux/%.v:
+theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`
 	$(CLIGHTGEN64) -Wall -Wno-unused-variable -Werror -normalize -o $@ $<
+	echo "(*\nInput hashes (sha256):\n\n`$(SHA256SUM) $^`\n*)" >> $@
 
-theories/$(PROJECT)/c/clightgen/x86_32-linux/%.v:
+
+theories/$(PROJECT)/vst/clightgen/x86_32-linux/%.v:
 	mkdir -p `dirname $@`
 	$(CLIGHTGEN32) -Wall -Wno-unused-variable -Werror -normalize -o $@ $<
+	echo "(*\nInput hashes (sha256):\n\n`$(SHA256SUM) $^`\n*)" >> $@
 
 
-_CoqProject: theories/$(PROJECT)/c/clightgen/$(TARGET)/int63.v
-	echo "# $(TARGET)"                                                          > $@
-	@[ -z $(VST_DIR) ]          || echo "-Q $(VST_DIR) VST"                     >> $@
-	@[ -z $(COMPCERT_DIR) ]     || echo "-Q $(COMPCERT_DIR) compcert"           >> $@
-	echo "-Q theories/$(PROJECT)/model $(PROJECT).model"                        >> $@
-	echo "-Q theories/$(PROJECT)/c/ast $(PROJECT).c.ast"                        >> $@
-	echo "-Q theories/$(PROJECT)/c/clightgen/$(TARGET) $(PROJECT).c.clightgen"  >> $@
-	echo "-Q theories/$(PROJECT)/c/proof $(PROJECT).c.proof"                    >> $@
-	echo "-Q theories/$(PROJECT)/c/spec $(PROJECT).c.spec"                      >> $@
-	find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-                 >> $@
-	find theories/$(PROJECT)/c/ast -name "*.v" | cut -d'/' -f1-                 >> $@
-	find theories/$(PROJECT)/c/clightgen/$(TARGET) -name "*.v" | cut -d'/' -f1- >> $@
-	find theories/$(PROJECT)/c/proof -name "*.v" | cut -d'/' -f1-               >> $@
-	find theories/$(PROJECT)/c/spec -name "*.v" | cut -d'/' -f1-                >> $@
+_CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
+	echo "# $(TARGET)"                                                                  > $@
+	@[ -z $(VST_DIR) ]          || echo "-Q $(VST_DIR) VST"                             >> $@
+	@[ -z $(COMPCERT_DIR) ]     || echo "-Q $(COMPCERT_DIR) compcert"                   >> $@
+	echo "-Q theories/$(PROJECT)/model                      $(PROJECT).model"           >> $@
+	echo "-Q theories/$(PROJECT)/vst/ast                    $(PROJECT).vst.ast"         >> $@
+	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PROJECT).vst.clightgen"   >> $@
+	echo "-Q theories/$(PROJECT)/vst/proof                  $(PROJECT).vst.proof"       >> $@
+	echo "-Q theories/$(PROJECT)/vst/spec                   $(PROJECT).vst.spec"        >> $@
+	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1- >> $@
+	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1- >> $@
+	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1- >> $@
+	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1- >> $@
+	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1- >> $@
 
 
 Makefile.coq: Makefile _CoqProject
@@ -77,22 +81,37 @@ theories: Makefile.coq
 	$(MAKE) -f Makefile.coq -j$(J)
 
 
-C_SOURCES=$(shell find ./ -name "*.c" | cut -d'/' -f2-) $(shell find ./ -name "*.h" | cut -d'/' -f2-)
-COQ_SOURCES=$(shell find ./ -name "*.v" | cut -d'/' -f2-)
+C_SOURCES= \
+	$(shell find src/c -name "*.c" | cut -d'/' -f3-) \
+	$(shell find src/c -name "*.h" | cut -d'/' -f3-)
 
-INSTALL_SOURCES=$(C_SOURCES) $(COQ_SOURCES)
-INSTALL_COMPILED=$(COQ_SOURCES:%.v=%.vo)
+COQ_SOURCES= \
+	$(shell find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-) \
+	$(shell find theories/$(PROJECT)/vst/ast -name "*.v" | cut -d'/' -f1-) \
+	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET) -name "*.v" | cut -d'/' -f1-) \
+	$(shell find theories/$(PROJECT)/vst/proof -name "*.v" | cut -d'/' -f1-) \
+	$(shell find theories/$(PROJECT)/vst/spec -name "*.v" | cut -d'/' -f1-)
 
-.PHONY: install
-install:
+COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
+
+.PHONY: install install-src install-vst
+
+install-src:
 	install -d "$(INSTALLDIR)"
-	for d in $(sort $(dir $(INSTALL_SOURCES) $(INSTALL_COMPILED))); do install -d "$(INSTALLDIR)/$$d"; done
-	for f in $(INSTALL_SOURCES) $(INSTALL_COMPILED); do install -m 0644 $$f "$(INSTALLDIR)/$$(dirname $$f)"; done
+	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(INSTALLDIR)/$$d"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(INSTALLDIR)/$$(dirname $$f)"; done
+
+install-vst: theories
+	install -d "$(INSTALLDIR)"
+	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(INSTALLDIR)/$$d"; done
+	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 $$f "$(INSTALLDIR)/$$(dirname $$f)"; done
+
+install: install-src install-vst
 
 
 clightgen: \
-	theories/$(PROJECT)/c/clightgen/x86_64-linux/int63.v \
-	theories/$(PROJECT)/c/clightgen/x86_32-linux/int63.v
+	theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v \
+	theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v
 
 
 clean:
@@ -105,3 +124,6 @@ clean:
 
 deepclean: clean
 	rm -f _CoqProject
+
+verydeepclean: deepclean
+	rm -rf theories/$(PROJECT)/vst/clightgen
