@@ -15,7 +15,7 @@ Module Info.
   Definition abi := "standard".
   Definition bitsize := 64.
   Definition big_endian := false.
-  Definition source_file := "src/c/int63.c".
+  Definition source_file := "src/c/include/coq-vst-int63/src/int63.c".
   Definition normalized := true.
 End Info.
 
@@ -75,7 +75,331 @@ Definition ___compcert_va_composite : ident := $"__compcert_va_composite".
 Definition ___compcert_va_float64 : ident := $"__compcert_va_float64".
 Definition ___compcert_va_int32 : ident := $"__compcert_va_int32".
 Definition ___compcert_va_int64 : ident := $"__compcert_va_int64".
+Definition __x : ident := $"_x".
+Definition __y : ident := $"_y".
+Definition __z : ident := $"_z".
+Definition _decode_int63 : ident := $"decode_int63".
+Definition _encode_int63 : ident := $"encode_int63".
+Definition _int63_abs : ident := $"int63_abs".
+Definition _int63_add : ident := $"int63_add".
+Definition _int63_and : ident := $"int63_and".
+Definition _int63_div : ident := $"int63_div".
+Definition _int63_mul : ident := $"int63_mul".
+Definition _int63_neg : ident := $"int63_neg".
+Definition _int63_not : ident := $"int63_not".
+Definition _int63_one : ident := $"int63_one".
+Definition _int63_or : ident := $"int63_or".
+Definition _int63_rem : ident := $"int63_rem".
+Definition _int63_shiftl : ident := $"int63_shiftl".
+Definition _int63_shiftr : ident := $"int63_shiftr".
+Definition _int63_sub : ident := $"int63_sub".
+Definition _int63_xor : ident := $"int63_xor".
+Definition _int63_zero : ident := $"int63_zero".
 Definition _main : ident := $"main".
+Definition _x : ident := $"x".
+Definition _y : ident := $"y".
+Definition _t'1 : ident := 128%positive.
+Definition _t'2 : ident := 129%positive.
+Definition _t'3 : ident := 130%positive.
+
+Definition f_encode_int63 := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oor
+                 (Ebinop Oshl (Etempvar _x tlong)
+                   (Econst_int (Int.repr 1) tint) tlong)
+                 (Econst_int (Int.repr 1) tint) tlong)))
+|}.
+
+Definition f_decode_int63 := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oshr (Ecast (Etempvar _x tlong) tlong)
+                 (Econst_int (Int.repr 1) tint) tlong)))
+|}.
+
+Definition f_int63_zero := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := nil;
+  fn_vars := nil;
+  fn_temps := ((_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Scall (Some _t'1)
+    (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+    ((Econst_int (Int.repr 0) tint) :: nil))
+  (Sreturn (Some (Etempvar _t'1 tlong))))
+|}.
+
+Definition f_int63_one := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := nil;
+  fn_vars := nil;
+  fn_temps := ((_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Scall (Some _t'1)
+    (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+    ((Econst_int (Int.repr 1) tint) :: nil))
+  (Sreturn (Some (Etempvar _t'1 tlong))))
+|}.
+
+Definition f_int63_neg := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Osub (Econst_int (Int.repr 2) tint)
+                 (Etempvar _x tlong) tlong)))
+|}.
+
+Definition f_int63_abs := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Sifthenelse (Ebinop Olt (Etempvar _x tlong) (Econst_int (Int.repr 0) tint)
+                 tint)
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _int63_neg (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _x tlong) :: nil))
+      (Sset _t'1 (Ecast (Etempvar _t'2 tlong) tlong)))
+    (Sset _t'1 (Ecast (Etempvar _x tlong) tlong)))
+  (Sreturn (Some (Etempvar _t'1 tlong))))
+|}.
+
+Definition f_int63_add := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Osub
+                 (Ebinop Oadd (Etempvar _x tlong) (Etempvar _y tlong) tlong)
+                 (Econst_int (Int.repr 1) tint) tlong)))
+|}.
+
+Definition f_int63_sub := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oadd
+                 (Ebinop Osub (Etempvar _x tlong) (Etempvar _y tlong) tlong)
+                 (Econst_int (Int.repr 1) tint) tlong)))
+|}.
+
+Definition f_int63_mul := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((__x, tlong) :: (__y, tlong) :: (__z, tlong) ::
+               (_t'3, tlong) :: (_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Ssequence
+    (Scall (Some _t'1)
+      (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+      ((Etempvar _x tlong) :: nil))
+    (Sset __x (Etempvar _t'1 tlong)))
+  (Ssequence
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _y tlong) :: nil))
+      (Sset __y (Etempvar _t'2 tlong)))
+    (Ssequence
+      (Sset __z
+        (Ebinop Omul (Etempvar __x tlong) (Etempvar __y tlong) tlong))
+      (Ssequence
+        (Scall (Some _t'3)
+          (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+          ((Etempvar __z tlong) :: nil))
+        (Sreturn (Some (Etempvar _t'3 tlong)))))))
+|}.
+
+Definition f_int63_div := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((__x, tlong) :: (__y, tlong) :: (__z, tlong) ::
+               (_t'3, tlong) :: (_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Ssequence
+    (Scall (Some _t'1)
+      (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+      ((Etempvar _x tlong) :: nil))
+    (Sset __x (Etempvar _t'1 tlong)))
+  (Ssequence
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _y tlong) :: nil))
+      (Sset __y (Etempvar _t'2 tlong)))
+    (Ssequence
+      (Sset __z
+        (Ebinop Odiv (Etempvar __x tlong) (Etempvar __y tlong) tlong))
+      (Ssequence
+        (Scall (Some _t'3)
+          (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+          ((Etempvar __z tlong) :: nil))
+        (Sreturn (Some (Etempvar _t'3 tlong)))))))
+|}.
+
+Definition f_int63_rem := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((__x, tlong) :: (__y, tlong) :: (__z, tlong) ::
+               (_t'3, tlong) :: (_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Ssequence
+    (Scall (Some _t'1)
+      (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+      ((Etempvar _x tlong) :: nil))
+    (Sset __x (Etempvar _t'1 tlong)))
+  (Ssequence
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _y tlong) :: nil))
+      (Sset __y (Etempvar _t'2 tlong)))
+    (Ssequence
+      (Sset __z
+        (Ebinop Omod (Etempvar __x tlong) (Etempvar __y tlong) tlong))
+      (Ssequence
+        (Scall (Some _t'3)
+          (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+          ((Etempvar __z tlong) :: nil))
+        (Sreturn (Some (Etempvar _t'3 tlong)))))))
+|}.
+
+Definition f_int63_shiftl := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((__x, tlong) :: (__y, tlong) :: (__z, tlong) ::
+               (_t'3, tlong) :: (_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Ssequence
+    (Scall (Some _t'1)
+      (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+      ((Etempvar _x tlong) :: nil))
+    (Sset __x (Etempvar _t'1 tlong)))
+  (Ssequence
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _y tlong) :: nil))
+      (Sset __y (Etempvar _t'2 tlong)))
+    (Ssequence
+      (Sset __z
+        (Ebinop Oshl (Etempvar __x tlong) (Etempvar __y tlong) tlong))
+      (Ssequence
+        (Scall (Some _t'3)
+          (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+          ((Etempvar __z tlong) :: nil))
+        (Sreturn (Some (Etempvar _t'3 tlong)))))))
+|}.
+
+Definition f_int63_shiftr := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := ((__x, tlong) :: (__y, tlong) :: (__z, tlong) ::
+               (_t'3, tlong) :: (_t'2, tlong) :: (_t'1, tlong) :: nil);
+  fn_body :=
+(Ssequence
+  (Ssequence
+    (Scall (Some _t'1)
+      (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+      ((Etempvar _x tlong) :: nil))
+    (Sset __x (Etempvar _t'1 tlong)))
+  (Ssequence
+    (Ssequence
+      (Scall (Some _t'2)
+        (Evar _decode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+        ((Etempvar _y tlong) :: nil))
+      (Sset __y (Etempvar _t'2 tlong)))
+    (Ssequence
+      (Sset __z
+        (Ebinop Oshr (Etempvar __x tlong) (Etempvar __y tlong) tlong))
+      (Ssequence
+        (Scall (Some _t'3)
+          (Evar _encode_int63 (Tfunction (Tcons tlong Tnil) tlong cc_default))
+          ((Etempvar __z tlong) :: nil))
+        (Sreturn (Some (Etempvar _t'3 tlong)))))))
+|}.
+
+Definition f_int63_or := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oor (Etempvar _x tlong) (Etempvar _y tlong) tlong)))
+|}.
+
+Definition f_int63_and := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oand (Etempvar _x tlong) (Etempvar _y tlong) tlong)))
+|}.
+
+Definition f_int63_xor := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: (_y, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oor (Ecast (Econst_int (Int.repr 1) tint) tlong)
+                 (Ebinop Oxor (Etempvar _x tlong) (Etempvar _y tlong) tlong)
+                 tlong)))
+|}.
+
+Definition f_int63_not := {|
+  fn_return := tlong;
+  fn_callconv := cc_default;
+  fn_params := ((_x, tlong) :: nil);
+  fn_vars := nil;
+  fn_temps := nil;
+  fn_body :=
+(Sreturn (Some (Ebinop Oor (Ecast (Econst_int (Int.repr 1) tint) tlong)
+                 (Eunop Onotint (Etempvar _x tlong) tlong) tlong)))
+|}.
 
 Definition composites : list composite_definition :=
 nil.
@@ -348,29 +672,48 @@ Definition global_definitions : list (ident * globdef fundef type) :=
                      {|cc_vararg:=(Some 1); cc_unproto:=false; cc_structret:=false|}))
      (Tcons tint Tnil) tvoid
      {|cc_vararg:=(Some 1); cc_unproto:=false; cc_structret:=false|})) ::
- nil).
+ (_encode_int63, Gfun(Internal f_encode_int63)) ::
+ (_decode_int63, Gfun(Internal f_decode_int63)) ::
+ (_int63_zero, Gfun(Internal f_int63_zero)) ::
+ (_int63_one, Gfun(Internal f_int63_one)) ::
+ (_int63_neg, Gfun(Internal f_int63_neg)) ::
+ (_int63_abs, Gfun(Internal f_int63_abs)) ::
+ (_int63_add, Gfun(Internal f_int63_add)) ::
+ (_int63_sub, Gfun(Internal f_int63_sub)) ::
+ (_int63_mul, Gfun(Internal f_int63_mul)) ::
+ (_int63_div, Gfun(Internal f_int63_div)) ::
+ (_int63_rem, Gfun(Internal f_int63_rem)) ::
+ (_int63_shiftl, Gfun(Internal f_int63_shiftl)) ::
+ (_int63_shiftr, Gfun(Internal f_int63_shiftr)) ::
+ (_int63_or, Gfun(Internal f_int63_or)) ::
+ (_int63_and, Gfun(Internal f_int63_and)) ::
+ (_int63_xor, Gfun(Internal f_int63_xor)) ::
+ (_int63_not, Gfun(Internal f_int63_not)) :: nil).
 
 Definition public_idents : list ident :=
-(___builtin_debug :: ___builtin_write32_reversed ::
- ___builtin_write16_reversed :: ___builtin_read32_reversed ::
- ___builtin_read16_reversed :: ___builtin_fnmsub :: ___builtin_fnmadd ::
- ___builtin_fmsub :: ___builtin_fmadd :: ___builtin_fmin ::
- ___builtin_fmax :: ___compcert_i64_umulh :: ___compcert_i64_smulh ::
- ___compcert_i64_sar :: ___compcert_i64_shr :: ___compcert_i64_shl ::
- ___compcert_i64_umod :: ___compcert_i64_smod :: ___compcert_i64_udiv ::
- ___compcert_i64_sdiv :: ___compcert_i64_utof :: ___compcert_i64_stof ::
- ___compcert_i64_utod :: ___compcert_i64_stod :: ___compcert_i64_dtou ::
- ___compcert_i64_dtos :: ___builtin_expect :: ___builtin_unreachable ::
- ___compcert_va_composite :: ___compcert_va_float64 ::
- ___compcert_va_int64 :: ___compcert_va_int32 :: ___builtin_va_end ::
- ___builtin_va_copy :: ___builtin_va_arg :: ___builtin_va_start ::
- ___builtin_membar :: ___builtin_annot_intval :: ___builtin_annot ::
- ___builtin_sel :: ___builtin_memcpy_aligned :: ___builtin_sqrt ::
- ___builtin_fsqrt :: ___builtin_fabsf :: ___builtin_fabs ::
- ___builtin_ctzll :: ___builtin_ctzl :: ___builtin_ctz :: ___builtin_clzll ::
- ___builtin_clzl :: ___builtin_clz :: ___builtin_bswap16 ::
- ___builtin_bswap32 :: ___builtin_bswap :: ___builtin_bswap64 ::
- ___builtin_ais_annot :: nil).
+(_int63_not :: _int63_xor :: _int63_and :: _int63_or :: _int63_shiftr ::
+ _int63_shiftl :: _int63_rem :: _int63_div :: _int63_mul :: _int63_sub ::
+ _int63_add :: _int63_abs :: _int63_neg :: _int63_one :: _int63_zero ::
+ _decode_int63 :: _encode_int63 :: ___builtin_debug ::
+ ___builtin_write32_reversed :: ___builtin_write16_reversed ::
+ ___builtin_read32_reversed :: ___builtin_read16_reversed ::
+ ___builtin_fnmsub :: ___builtin_fnmadd :: ___builtin_fmsub ::
+ ___builtin_fmadd :: ___builtin_fmin :: ___builtin_fmax ::
+ ___compcert_i64_umulh :: ___compcert_i64_smulh :: ___compcert_i64_sar ::
+ ___compcert_i64_shr :: ___compcert_i64_shl :: ___compcert_i64_umod ::
+ ___compcert_i64_smod :: ___compcert_i64_udiv :: ___compcert_i64_sdiv ::
+ ___compcert_i64_utof :: ___compcert_i64_stof :: ___compcert_i64_utod ::
+ ___compcert_i64_stod :: ___compcert_i64_dtou :: ___compcert_i64_dtos ::
+ ___builtin_expect :: ___builtin_unreachable :: ___compcert_va_composite ::
+ ___compcert_va_float64 :: ___compcert_va_int64 :: ___compcert_va_int32 ::
+ ___builtin_va_end :: ___builtin_va_copy :: ___builtin_va_arg ::
+ ___builtin_va_start :: ___builtin_membar :: ___builtin_annot_intval ::
+ ___builtin_annot :: ___builtin_sel :: ___builtin_memcpy_aligned ::
+ ___builtin_sqrt :: ___builtin_fsqrt :: ___builtin_fabsf ::
+ ___builtin_fabs :: ___builtin_ctzll :: ___builtin_ctzl :: ___builtin_ctz ::
+ ___builtin_clzll :: ___builtin_clzl :: ___builtin_clz ::
+ ___builtin_bswap16 :: ___builtin_bswap32 :: ___builtin_bswap ::
+ ___builtin_bswap64 :: ___builtin_ais_annot :: nil).
 
 Definition prog : Clight.program := 
   mkprogram composites global_definitions public_idents _main Logic.I.

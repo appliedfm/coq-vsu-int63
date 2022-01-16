@@ -37,9 +37,13 @@ ifeq ($(BITSIZE),32)
 endif
 
 
-theories/$(PROJECT)/c/clightgen/x86_64-linux/int63.v: src/c/int63.c src/c/int63.h
+theories/$(PROJECT)/c/clightgen/x86_64-linux/int63.v: \
+	src/c/include/coq-vst-int63/src/int63.c \
+	src/c/include/coq-vst-int63/int63.h
 
-theories/$(PROJECT)/c/clightgen/x86_32-linux/int63.v: src/c/int63.c src/c/int63.h
+theories/$(PROJECT)/c/clightgen/x86_32-linux/int63.v: \
+	src/c/include/coq-vst-int63/src/int63.c \
+	src/c/include/coq-vst-int63/int63.h
 
 theories/$(PROJECT)/c/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`

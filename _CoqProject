@@ -1,13 +1,11 @@
-# x86_32-linux
--Q /home/tcarstens/.opam/coq-8.14/lib/coq/../coq-variant/VST32/VST VST
--Q /home/tcarstens/.opam/coq-8.14/lib/coq/../coq-variant/compcert32/compcert compcert
+# x86_64-linux
 -Q theories/Int63/model Int63.model
 -Q theories/Int63/c/ast Int63.c.ast
--Q theories/Int63/c/clightgen/x86_32-linux Int63.c.clightgen
+-Q theories/Int63/c/clightgen/x86_64-linux Int63.c.clightgen
 -Q theories/Int63/c/proof Int63.c.proof
 -Q theories/Int63/c/spec Int63.c.spec
 theories/Int63/model/int63.v
 theories/Int63/c/ast/ast.v
-theories/Int63/c/clightgen/x86_32-linux/int63.v
+theories/Int63/c/clightgen/x86_64-linux/int63.v
 theories/Int63/c/proof/proof.v
 theories/Int63/c/spec/spec.v
