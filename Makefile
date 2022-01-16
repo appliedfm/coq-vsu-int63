@@ -1,3 +1,4 @@
+PUBLISHER=appliedfm
 PROJECT=Int63
 
 
@@ -24,12 +25,13 @@ ifeq ($(BITSIZE),64)
 	COMPCERT_DIR=$(COQLIB)/user-contrib/compcert
 	VST_DIR=$(COQLIB)/user-contrib/VST
 else ifeq ($(BITSIZE),32)
-	COQLIBINSTALL=$(COQLIB)/../coq-variant/$(PROJECT)-32
+	COQLIBINSTALL=$(COQLIB)/../coq-variant/
 	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
 
-INSTALLDIR?=$(COQLIBINSTALL)/$(PROJECT)
+BASE_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
+COQ_INSTALL_DIR?=$(BASE_INSTALL_DIR)/$(PROJECT)
 
 TARGET=x86_64-linux
 ifeq ($(BITSIZE),32)
@@ -38,7 +40,7 @@ endif
 
 
 ifeq ($(SRC),opam)
-	C_ROOT?=$(COQLIB)/user-contrib/$(PROJECT)
+	C_ROOT?=$(BASE_INSTALL_DIR)
 else
 	C_ROOT?=src/c
 endif
@@ -65,19 +67,19 @@ theories/$(PROJECT)/vst/clightgen/x86_32-linux/%.v:
 
 
 _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
-	echo "# $(TARGET)"                                                                  > $@
-	@[ -z $(VST_DIR) ]          || echo "-Q $(VST_DIR) VST"                             >> $@
-	@[ -z $(COMPCERT_DIR) ]     || echo "-Q $(COMPCERT_DIR) compcert"                   >> $@
-	echo "-Q theories/$(PROJECT)/model                      $(PROJECT).model"           >> $@
-	echo "-Q theories/$(PROJECT)/vst/ast                    $(PROJECT).vst.ast"         >> $@
-	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PROJECT).vst.clightgen"   >> $@
-	echo "-Q theories/$(PROJECT)/vst/proof                  $(PROJECT).vst.proof"       >> $@
-	echo "-Q theories/$(PROJECT)/vst/spec                   $(PROJECT).vst.spec"        >> $@
-	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1- >> $@
-	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1- >> $@
-	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1- >> $@
-	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1- >> $@
-	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1- >> $@
+	echo "# $(TARGET)"                                                                              > $@
+	@[ -z $(VST_DIR) ]          || echo "-Q $(VST_DIR) VST"                                         >> $@
+	@[ -z $(COMPCERT_DIR) ]     || echo "-Q $(COMPCERT_DIR) compcert"                               >> $@
+	echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
+	echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
+	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
+	echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
+	echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
+	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1-             >> $@
 
 
 Makefile.coq: Makefile _CoqProject
@@ -94,9 +96,9 @@ C_SOURCES= \
 	$(shell find src/c -name "*.h" | cut -d'/' -f3-)
 
 install-src:
-	install -d "$(INSTALLDIR)"
-	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(INSTALLDIR)/$$d"; done
-	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(INSTALLDIR)/$$(dirname $$f)"; done
+	install -d "$(BASE_INSTALL_DIR)"
+	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(BASE_INSTALL_DIR)/$$d"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(BASE_INSTALL_DIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model -name "*.v" | cut -d'/' -f1-) \
@@ -108,9 +110,9 @@ COQ_SOURCES= \
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 
 install-vst: theories
-	install -d "$(INSTALLDIR)"
-	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(INSTALLDIR)/$$d"; done
-	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 $$f "$(INSTALLDIR)/$$(dirname $$f)"; done
+	install -d "$(COQ_INSTALL_DIR)"
+	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
+	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 $$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 
 install: install-src install-vst
 

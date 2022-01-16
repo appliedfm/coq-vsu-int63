@@ -19,19 +19,19 @@ $ opam pin -n -y .
 $ opam install --working-dir ./coq-veric-int63-src.opam ./coq-veric-int63-vst.opam ./coq-veric-int63-vst-32.opam
 ```
 
-## Building without installing
+## Building without `opam`
 
-### `x86_64-linux`
-
-```console
-$ make deepclean ; make BITSIZE=64
-```
-
-### `x86_32-linux`
+The general pattern looks like this:
 
 ```console
-$ make deepclean ; make BITSIZE=32
+$ make [verydeepclean|deepclean|clean]
+$ make BITSIZE={opam|64|32} [COQLIBINSTALL=prefix] [all|theories|install|install-src|install-vst]
 ```
+
+`BITSIZE` determines which `compcert` target to use:
+
+* `opam` and `64` both use `x86_64-linux`
+* `32` uses `x86_32-linux`
 
 #
 
