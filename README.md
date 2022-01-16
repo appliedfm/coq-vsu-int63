@@ -8,15 +8,15 @@ Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/).
 
 ## Packages
 
-* `coq-veric-int63-src` - C source code
-* `coq-veric-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
-* `coq-veric-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-appliedfm-int63-src` - C source code
+* `coq-appliedfm-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
+* `coq-appliedfm-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
 
 ## Installing
 
 ```console
 $ opam pin -n -y .
-$ opam install --working-dir ./coq-veric-int63-src.opam ./coq-veric-int63-vst.opam ./coq-veric-int63-vst-32.opam
+$ opam install --working-dir ./coq-appliedfm-int63-src.opam ./coq-appliedfm-int63-vst.opam ./coq-appliedfm-int63-vst-32.opam
 ```
 
 ## Building without `opam`

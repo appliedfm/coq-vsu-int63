@@ -110,7 +110,7 @@ COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 install-vst: theories
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
-	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
+	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 
 install: install-src install-vst
 
