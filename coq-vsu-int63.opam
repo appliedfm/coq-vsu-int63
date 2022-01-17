@@ -12,9 +12,6 @@ build: [
 install: [
 ]
 depends: [
-    "coq" {>= "8.13.2"}
-    "coq-compcert" {>= "3.9"}
-    "coq-vst" {>= "2.8"}
     "coq-vsu-int63-src" {= version}
     "coq-vsu-int63-vst-32" {= version}
     "coq-vsu-int63-vst" {= version}
