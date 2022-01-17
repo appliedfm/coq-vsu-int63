@@ -112,13 +112,13 @@ theories: Makefile.coq
 .PHONY: install install-src install-vst
 
 C_SOURCES= \
-	$(shell find src/c -name "*.c" | cut -d'/' -f3-) \
-	$(shell find src/c -name "*.h" | cut -d'/' -f3-)
+	$(shell find src/c/include -name "*.c" | cut -d'/' -f4-) \
+	$(shell find src/c/include -name "*.h" | cut -d'/' -f4-)
 
 install-src:
 	install -d "$(C_INSTALL_DIR)"
 	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(C_INSTALL_DIR)/$$d"; done
-	for f in $(C_SOURCES); do install -m 0644 src/c/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f2-) \
