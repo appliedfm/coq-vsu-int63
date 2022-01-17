@@ -1,5 +1,5 @@
-#ifndef COQ_VST_INT63__INT63_H
-#define COQ_VST_INT63__INT63_H
+#ifndef COQ_VSU_INT63__INT63_H
+#define COQ_VSU_INT63__INT63_H
 
 #include <stdint.h>
 
@@ -24,4 +24,4 @@ int63_t int63_and(int63_t x, int63_t y);
 int63_t int63_xor(int63_t x, int63_t y);
 int63_t int63_not(int63_t x);
 
-#endif /* COQ_VST_INT63__INT63_H */
+#endif /* COQ_VSU_INT63__INT63_H */

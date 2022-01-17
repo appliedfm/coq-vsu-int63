@@ -1,5 +1,5 @@
-#ifndef COQ_VST_INT63__INT63_C
-#define COQ_VST_INT63__INT63_C
+#ifndef COQ_VSU_INT63__INT63_C
+#define COQ_VSU_INT63__INT63_C
 
 #include "../int63.h"
 
@@ -88,4 +88,4 @@ int63_t int63_not(int63_t x) {
     return (int63_t)1 | ~ x;
 }
 
-#endif /* COQ_VST_INT63__INT63_C */
+#endif /* COQ_VSU_INT63__INT63_C */
