@@ -26,7 +26,7 @@ $ opam install --working-dir ./coq-vsu-int63.opam
 
 ## Using the C library
 
-The C library is installed to the path specified by `vsu -I`. For example:
+The C library is installed to the path given by `vsu -I`. For example:
 
 ```console
 tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ tree `vsu -I`
