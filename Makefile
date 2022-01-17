@@ -51,17 +51,17 @@ COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 ifeq ($(SRC),opam)
 	C_ROOT?=$(C_INSTALL_DIR)
 else
-	C_ROOT?=src/c
+	C_ROOT?=src/c/include
 endif
 
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v: \
-	$(C_ROOT)/include/coq-vsu-int63/src/int63.c \
-	$(C_ROOT)/include/coq-vsu-int63/int63.h
+	$(C_ROOT)/coq-vsu-int63/src/int63.c \
+	$(C_ROOT)/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v: \
-	$(C_ROOT)/include/coq-vsu-int63/src/int63.c \
-	$(C_ROOT)/include/coq-vsu-int63/int63.h
+	$(C_ROOT)/coq-vsu-int63/src/int63.c \
+	$(C_ROOT)/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`
