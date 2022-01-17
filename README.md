@@ -13,12 +13,13 @@ Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/).
 * `coq-vsu-int63-src` - C source code
 * `coq-vsu-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
 * `coq-vsu-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-vsu-int63` - All of the above
 
 ## Installing
 
 ```console
 $ opam pin -n -y .
-$ opam install --working-dir ./coq-vsu-int63-src.opam ./coq-vsu-int63-vst.opam ./coq-vsu-int63-vst-32.opam
+$ opam install --working-dir ./coq-vsu-int63.opam
 ```
 
 ## Building without `opam`
