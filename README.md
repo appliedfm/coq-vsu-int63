@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/appliedfm/coq-vsu-int63)
 
-A [verified software unit](https://softwarefoundations.cis.upenn.edu/vc-current/VSU_intro.html) for 63-bit integer arithmetic.
+A [Verified Software Unit](https://github.com/appliedfm/coq-vsu) for 63-bit integer arithmetic.
 
 Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq.
 

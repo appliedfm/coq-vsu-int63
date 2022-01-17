@@ -99,6 +99,7 @@ _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 
 
 Makefile.coq: Makefile _CoqProject
+	cat _CoqProject
 	coq_makefile -f _CoqProject -o Makefile.coq
 
 theories: Makefile.coq
@@ -119,6 +120,7 @@ install-src:
 	install -d "$(C_INSTALL_DIR)"
 	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(C_INSTALL_DIR)/$$d"; done
 	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
+	tree "$(C_INSTALL_DIR)" || true
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f2-) \
@@ -135,6 +137,7 @@ install-vst: theories
 	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 	mv    $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)/* $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/
 	rmdir $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)
+	tree "$(COQ_INSTALL_DIR)" || true
 
 install: install-src install-vst
 
