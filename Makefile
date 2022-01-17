@@ -24,8 +24,11 @@ VSUTOOL?=vsu
 -include CONFIGURE
 
 
+VSU_INCLUDE_DIR=$(shell $(VSUTOOL) -I)
+
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 COQLIBINSTALL=$(COQLIB)/user-contrib
+COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 CLIGHTGEN64?=$(COQLIB)/../../bin/clightgen
 CLIGHTGEN32?=$(COQLIB)/../../variants/compcert32/bin/clightgen
@@ -36,12 +39,10 @@ ifeq ($(BITSIZE),64) # This is an alias for BITSIZE=opam
 else ifeq ($(BITSIZE),32)
 	TARGET=x86_32-linux
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
+	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32
 	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
-
-C_INSTALL_DIR=$(shell $(VSUTOOL) -I)
-COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 
 #
@@ -49,7 +50,7 @@ COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 #
 
 ifeq ($(SRC),opam)
-	C_ROOT?=$(C_INSTALL_DIR)
+	C_ROOT?=$(VSU_INCLUDE_DIR)
 else
 	C_ROOT?=src/c/include
 endif
@@ -117,10 +118,10 @@ C_SOURCES= \
 	$(shell find src/c/include -name "*.h" | cut -d'/' -f4-)
 
 install-src:
-	install -d "$(C_INSTALL_DIR)"
-	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(C_INSTALL_DIR)/$$d"; done
-	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(C_INSTALL_DIR)/$$(dirname $$f)"; done
-	tree "$(C_INSTALL_DIR)" || true
+	install -d "$(VSU_INCLUDE_DIR)"
+	for d in $(sort $(dir $(C_SOURCES))); do install -d "$(VSU_INCLUDE_DIR)/$$d"; done
+	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(VSU_INCLUDE_DIR)/$$(dirname $$f)"; done
+	tree "$(VSU_INCLUDE_DIR)" || true
 
 COQ_SOURCES= \
 	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f2-) \
