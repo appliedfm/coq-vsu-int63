@@ -33,6 +33,6 @@ jobs:
           before_install: |
             startGroup "opam pin"
               git clone https://github.com/appliedfm/coq-vsu.git ~/coq-vsu
-              opam pin -n -y ~/coq-vsu/src/.
+              opam pin -n -y ~/coq-vsu/src/
               opam pin -n -y .
             endGroup

@@ -1,16 +1,25 @@
-PUBLISHER=appliedfm
-PROJECT=Int63
-
-
 .PHONY: all theories install clightgen clean deepclean
 
 all: theories
 
 
+#
+# meta
+#
+
+PUBLISHER=appliedfm
+PROJECT=Int63
+
+
+#
+# configure
+#
+
 J?=4
 BITSIZE?=opam
 COQC?=coqc
-SHA256SUM=sha256sum
+SHA256SUM?=sha256sum
+VSUTOOL?=vsu
 
 -include CONFIGURE
 
@@ -21,21 +30,23 @@ COQLIBINSTALL=$(COQLIB)/user-contrib
 CLIGHTGEN64?=$(COQLIB)/../../bin/clightgen
 CLIGHTGEN32?=$(COQLIB)/../../variants/compcert32/bin/clightgen
 
+TARGET=x86_64-linux
+
 ifeq ($(BITSIZE),64) # This is an alias for BITSIZE=opam
 else ifeq ($(BITSIZE),32)
+	TARGET=x86_32-linux
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
 	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
 
-C_INSTALL_DIR=$(COQLIB)/../coq-vsu
+C_INSTALL_DIR=$(shell $(VSUTOOL) -I)
 COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
-TARGET=x86_64-linux
-ifeq ($(BITSIZE),32)
-	TARGET=x86_32-linux
-endif
 
+#
+# clightgen
+#
 
 ifeq ($(SRC),opam)
 	C_ROOT?=$(C_INSTALL_DIR)
@@ -57,12 +68,19 @@ theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	$(CLIGHTGEN64) -Wall -Wno-unused-variable -Werror -normalize -o $@ $<
 	echo "(*\nInput hashes (sha256):\n\n`$(SHA256SUM) $^`\n*)" >> $@
 
-
 theories/$(PROJECT)/vst/clightgen/x86_32-linux/%.v:
 	mkdir -p `dirname $@`
 	$(CLIGHTGEN32) -Wall -Wno-unused-variable -Werror -normalize -o $@ $<
 	echo "(*\nInput hashes (sha256):\n\n`$(SHA256SUM) $^`\n*)" >> $@
 
+clightgen: \
+	theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v \
+	theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v
+
+
+#
+# theories
+#
 
 _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 	echo "# $(TARGET)"                                                                              > $@
@@ -86,6 +104,10 @@ Makefile.coq: Makefile _CoqProject
 theories: Makefile.coq
 	$(MAKE) -f Makefile.coq -j$(J)
 
+
+#
+# install
+#
 
 .PHONY: install install-src install-vst
 
@@ -117,10 +139,9 @@ install-vst: theories
 install: install-src install-vst
 
 
-clightgen: \
-	theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v \
-	theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v
-
+#
+# clean
+#
 
 clean:
 	[ ! -f Makefile.coq ] || $(MAKE) -f Makefile.coq clean
