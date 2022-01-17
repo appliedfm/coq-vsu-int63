@@ -1,6 +1,8 @@
-# coq-vst-int63
+# coq-vsu-int63
 
-![GitHub](https://img.shields.io/github/license/appliedfm/coq-vst-int63)
+![GitHub](https://img.shields.io/github/license/appliedfm/coq-vsu-int63)
+
+A [verified software unit](https://softwarefoundations.cis.upenn.edu/vc-current/VSU_intro.html) for 63-bit integer arithmetic.
 
 Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq.
 
@@ -8,15 +10,15 @@ Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/).
 
 ## Packages
 
-* `coq-appliedfm-int63-src` - C source code
-* `coq-appliedfm-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
-* `coq-appliedfm-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-vsu-int63-src` - C source code
+* `coq-vsu-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
+* `coq-vsu-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
 
 ## Installing
 
 ```console
 $ opam pin -n -y .
-$ opam install --working-dir ./coq-appliedfm-int63-src.opam ./coq-appliedfm-int63-vst.opam ./coq-appliedfm-int63-vst-32.opam
+$ opam install --working-dir ./coq-vsu-int63-src.opam ./coq-vsu-int63-vst.opam ./coq-vsu-int63-vst-32.opam
 ```
 
 ## Building without `opam`

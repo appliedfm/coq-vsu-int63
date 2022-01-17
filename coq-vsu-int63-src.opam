@@ -2,10 +2,10 @@ opam-version: "2.0"
 name: "Int63"
 version: "1.0"
 maintainer: "appliedfm"
-homepage: "https://github.com/appliedfm/coq-vst-int63"
-dev-repo: "git+https://github.com/appliedfm/coq-vst-int63.git"
-bug-reports: "https://github.com/appliedfm/coq-vst-int63/issues"
-license: "https://github.com/appliedfm/coq-vst-int63/blob/main/LICENSE"
+homepage: "https://github.com/appliedfm/coq-vsu-int63"
+dev-repo: "git+https://github.com/appliedfm/coq-vsu-int63.git"
+bug-reports: "https://github.com/appliedfm/coq-vsu-int63/issues"
+license: "https://github.com/appliedfm/coq-vsu-int63/blob/main/LICENSE"
 authors: ["Tim Carstens" "appliedfm"]
 build: []
 install: [

@@ -28,7 +28,7 @@ else ifeq ($(BITSIZE),32)
 	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
 endif
 
-C_INSTALL_DIR=$(COQLIB)/../$(PUBLISHER)
+C_INSTALL_DIR=$(COQLIB)/../coq-vsu
 COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
 
 TARGET=x86_64-linux
@@ -45,12 +45,12 @@ endif
 
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v: \
-	$(C_ROOT)/include/coq-vst-int63/src/int63.c \
-	$(C_ROOT)/include/coq-vst-int63/int63.h
+	$(C_ROOT)/include/coq-vsu-int63/src/int63.c \
+	$(C_ROOT)/include/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v: \
-	$(C_ROOT)/include/coq-vst-int63/src/int63.c \
-	$(C_ROOT)/include/coq-vst-int63/int63.h
+	$(C_ROOT)/include/coq-vsu-int63/src/int63.c \
+	$(C_ROOT)/include/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`
