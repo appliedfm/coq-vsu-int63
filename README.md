@@ -29,15 +29,15 @@ $ opam install --working-dir ./coq-vsu-int63.opam
 The C library is installed to the path given by `vsu -I`. For example:
 
 ```console
-tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ tree `vsu -I`
-/home/tcarstens/.opam/coq-8.14/lib/coq-vsu/include
+$ tree `vsu -I`
+/home/tcarstens/.opam/coq-8.14/lib/coq-vsu/lib/include
 └── coq-vsu-int63
     ├── int63.h
     └── src
         └── int63.c
 
 2 directories, 2 files
-tcarstens@pop-os:~/formal_methods/coq-vsu-int63$
+$
 ```
 
 ## Building without `opam`
