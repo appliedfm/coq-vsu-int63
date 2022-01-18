@@ -138,6 +138,11 @@ COQ_SOURCES= \
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 
 install-vst: theories
+	echo "{" > install-meta.json
+	echo "    'coq-path': '$(COQ_INSTALL_DIR)'" >> install-meta.json
+	echo "}" >> install-meta.json
+	install -d `$(VSUTOOL) --show-meta-path`
+	install -m 0644 install-meta.json `$(VSUTOOL) --show-meta-path`/$(PACKAGE_NAME).json
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
 	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
@@ -154,6 +159,7 @@ install: install-src install-vst
 
 clean:
 	[ ! -f Makefile.coq ] || $(MAKE) -f Makefile.coq clean
+	rm -f install-meta.json
 	rm -f `find ./ -name "*Makefile.coq*"`
 	rm -f `find ./ -name ".*.cache"`
 	rm -f `find ./ -name "*.aux"`
