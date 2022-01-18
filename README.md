@@ -1,5 +1,7 @@
 # coq-vsu-int63
 
+![build](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml/badge.svg)
+
 ![GitHub](https://img.shields.io/github/license/appliedfm/coq-vsu-int63)
 
 A [Verified Software Unit](https://github.com/appliedfm/coq-vsu) for 63-bit integer arithmetic.
