@@ -91,7 +91,6 @@ _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 	echo "# $(TARGET)"                          > $@
 	echo `$(VSUTOOL) -Q $(COMPCERT_PACKAGE)`    >> $@
 	echo `$(VSUTOOL) -Q $(VST_PACKAGE)`         >> $@
-	echo "# files:"                             >> $@
 	echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
 	echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
 	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
