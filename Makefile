@@ -145,7 +145,7 @@ install-vst: theories
 	@[ -z $(PACKAGE_NAME) ] || install -m 0644 install-meta.json `$(VSUTOOL) --show-meta-path`/$(PACKAGE_NAME).json
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
-	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
+	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 	mv    $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)/* $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/
 	rmdir $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)
 	tree "$(COQ_INSTALL_DIR)" || true
