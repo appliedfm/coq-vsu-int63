@@ -15,7 +15,7 @@ Compatible with `CompCert <https://compcert.org/>`_.
 C library
 ---------
 
-See our `Doxygen docs <_static/doxygen/html/index.html>`_.
+See our `Doxygen docs <doxygen/html/index.html>`_.
 
 Coq library
 -----------
