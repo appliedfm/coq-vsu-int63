@@ -25,8 +25,8 @@ VSUTOOL?=vsu
 
 
 VSU_INCLUDE_DIR=$(shell $(VSUTOOL) -I)
-CLIGHTGEN64?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert/clightgen)
-CLIGHTGEN32?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert-32/clightgen)
+CLIGHTGEN64?=$(shell $(VSUTOOL) --show-tool-path=coq-compcert/clightgen)
+CLIGHTGEN32?=$(shell $(VSUTOOL) --show-tool-path=coq-compcert-32/clightgen)
 
 
 TARGET=x86_64-linux
