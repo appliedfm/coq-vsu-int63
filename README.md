@@ -1,6 +1,6 @@
 # coq-vsu-int63
 
-![build](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml/badge.svg)
+[![build](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml/badge.svg)](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml)
 
 ![GitHub](https://img.shields.io/github/license/appliedfm/coq-vsu-int63)
 
