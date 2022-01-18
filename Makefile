@@ -1,4 +1,4 @@
-.PHONY: all theories install clightgen clean deepclean
+.PHONY: all theories clightgen install clean deepclean
 
 all: theories
 
@@ -29,20 +29,52 @@ CLIGHTGEN64?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert/clightgen
 CLIGHTGEN32?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert-32/clightgen)
 
 
+TARGET=x86_64-linux
+COMPCERT_PACKAGE=coq-compcert
+VST_PACKAGE=coq-vst
+
+
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
+
 COQLIBINSTALL=$(COQLIB)/user-contrib
 COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
-
-TARGET=x86_64-linux
 
 ifeq ($(BITSIZE),64) # This is an alias for BITSIZE=opam
 else ifeq ($(BITSIZE),32)
 	TARGET=x86_32-linux
+	COMPCERT_PACKAGE=coq-compcert-32
+	VST_PACKAGE=coq-vst-32
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
 	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32
-	COMPCERT_DIR=$(shell $(VSUTOOL) --show-coq-variant-path=coq-compcert-32)
-	VST_DIR=$(shell $(VSUTOOL) --show-coq-variant-path=coq-vst-32)
 endif
+
+
+#
+# theories
+#
+
+_CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
+	echo "# $(TARGET)"                                                                              > $@
+	echo `$(VSUTOOL) --show-coq-q-arg=$(COMPCERT_PACKAGE)`                                          >> $@
+	echo `$(VSUTOOL) --show-coq-q-arg=$(VST_PACKAGE)`                                               >> $@
+	echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
+	echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
+	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
+	echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
+	echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
+	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1-             >> $@
+	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1-             >> $@
+
+
+Makefile.coq: Makefile _CoqProject
+	cat _CoqProject
+	coq_makefile -f _CoqProject -o Makefile.coq
+
+theories: Makefile.coq
+	$(MAKE) -f Makefile.coq -j$(J)
 
 
 #
@@ -77,34 +109,6 @@ theories/$(PROJECT)/vst/clightgen/x86_32-linux/%.v:
 clightgen: \
 	theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v \
 	theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v
-
-
-#
-# theories
-#
-
-_CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
-	echo "# $(TARGET)"                                                                              > $@
-	@[ -z $(VST_DIR) ]          || echo "-Q $(VST_DIR) VST"                                         >> $@
-	@[ -z $(COMPCERT_DIR) ]     || echo "-Q $(COMPCERT_DIR) compcert"                               >> $@
-	echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
-	echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
-	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
-	echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
-	echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
-	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1-             >> $@
-
-
-Makefile.coq: Makefile _CoqProject
-	cat _CoqProject
-	coq_makefile -f _CoqProject -o Makefile.coq
-
-theories: Makefile.coq
-	$(MAKE) -f Makefile.coq -j$(J)
 
 
 #
