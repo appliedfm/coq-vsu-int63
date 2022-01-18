@@ -16,6 +16,8 @@ Specifications are proven respect for the following targets:
 - [x] `x86_64-linux`
 - [x] `x86_32-linux`
 
+Proofs are checked by our [CI infrastructure](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml).
+
 
 ## Packages
 
