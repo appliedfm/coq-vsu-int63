@@ -1,5 +1,7 @@
 # coq-vsu-int63
 
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fcoq-vsu-int63.readthedocs.io)
+![Documentation Status](https://readthedocs.org/projects/coq-vsu-int63/badge/?version=latest)
 [![build](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml/badge.svg)](https://github.com/appliedfm/coq-vsu-int63/actions/workflows/build.yml)
 
 ![GitHub](https://img.shields.io/github/license/appliedfm/coq-vsu-int63)
@@ -90,7 +92,10 @@ $ xdg-open docs/build/html/index.html
 #
 
 [![Coq](https://img.shields.io/badge/-Coq-royalblue)](https://github.com/coq/coq)
-[![compcert](https://img.shields.io/badge/-compcert-orangered)](https://compcert.org/)
-[![VST](https://img.shields.io/badge/-VST-navy)](https://vst.cs.princeton.edu/)
+[![compcert](https://img.shields.io/badge/-compcert-pink)](https://compcert.org/)
+[![VST](https://img.shields.io/badge/-VST-palevioletred)](https://vst.cs.princeton.edu/)
+[![Alectryon](https://img.shields.io/badge/-Alectryon-orangered)](https://github.com/cpitclaudel/alectryon/)
+[![Sphinx](https://img.shields.io/badge/-Sphinx-navy)](https://www.sphinx-doc.org)
+[![readthedocs](https://img.shields.io/badge/-readthedocs-slateblue)](https://readthedocs.org)
 
 [![applied.fm](https://img.shields.io/badge/-applied.fm-orchid)](https://applied.fm)
