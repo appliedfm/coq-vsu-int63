@@ -140,8 +140,8 @@ install-vst: theories
 	[ -z $(PACKAGE_NAME) ] || echo "{" > install-meta.json
 	[ -z $(PACKAGE_NAME) ] || echo "    'coq-path': '$(COQ_INSTALL_DIR)'" >> install-meta.json
 	[ -z $(PACKAGE_NAME) ] || echo "}" >> install-meta.json
-	[ -z $(PACKAGE_NAME) ] || install -d `$(VSUTOOL) --show-meta-path`
-	[ -z $(PACKAGE_NAME) ] || install -m 0644 install-meta.json `$(VSUTOOL) --show-meta-path`/$(PACKAGE_NAME).json
+	[ -z $(PACKAGE_NAME) ] || install -d `$(VSUTOOL) --show-unit-metadata-path`
+	[ -z $(PACKAGE_NAME) ] || install -m 0644 install-meta.json `$(VSUTOOL) --show-unit-metadata-path`/$(PACKAGE_NAME).json
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
 	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
