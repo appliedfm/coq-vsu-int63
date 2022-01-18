@@ -146,8 +146,8 @@ install-vst: theories
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
 	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
-	mv    $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)/* $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/
-	rmdir $(COQ_INSTALL_DIR)/$(PROJECT)/vst/clightgen/$(TARGET)
+	mv    $(COQ_INSTALL_DIR)/vst/clightgen/$(TARGET)/* $(COQ_INSTALL_DIR)/vst/clightgen/
+	rmdir $(COQ_INSTALL_DIR)/vst/clightgen/$(TARGET)
 	tree "$(COQ_INSTALL_DIR)" || true
 
 install: install-src install-vst
