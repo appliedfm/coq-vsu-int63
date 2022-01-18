@@ -1,3 +1,4 @@
+docs/build
 install-meta.json
 *Makefile.coq*
 .*.cache

@@ -6,9 +6,9 @@
 
 A [Verified Software Unit](https://github.com/appliedfm/coq-vsu) for 63-bit integer arithmetic.
 
-Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq.
+Implemented in C, modeled in [Coq](https://coq.inria.fr), and proven correct using the [Verified Software Toolchain](https://vst.cs.princeton.edu/).
 
-Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/). Compatible with [CompCert](https://compcert.org/).
+Compatible with [CompCert](https://compcert.org/).
 
 
 ## Verification status
@@ -78,6 +78,14 @@ $ make verydeepclean ; make
 ```console
 $ make verydeepclean ; make BITSIZE=32
 ```
+
+## Building the docs
+
+```console
+$ make -C docs html
+$ xdg-open docs/build/html/index.html
+```
+
 
 #
 
