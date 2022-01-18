@@ -4,6 +4,11 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+# -- doxygen rendering ------------------------------------------------------------
+
+import subprocess
+subprocess.call('cd .. ; rm -rf build/html/_static/doxygen ; mkdir -p build/html/_static/doxygen ; doxygen doxygen/Doxyfile', shell=True)
+
 # -- alectryon setup --------------------------------------------------------------
 
 import alectryon.docutils
@@ -22,8 +27,14 @@ html_favicon = 'favicon.ico'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "alectryon.sphinx"
+    'alectryon.sphinx',
+    'breathe',
 ]
+
+breathe_projects = {
+    'coq-vsu-int63': '../build/html/_static/doxygen/xml/',
+}
+breathe_default_project = 'coq-vsu-int63'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

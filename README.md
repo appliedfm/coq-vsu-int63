@@ -83,6 +83,8 @@ $ make verydeepclean ; make BITSIZE=32
 
 ## Building the docs
 
+Note that this requires [Doxygen](https://www.doxygen.nl) and [Sphinx](https://www.sphinx-doc.org).
+
 ```console
 $ make -C docs html
 $ xdg-open docs/build/html/index.html
