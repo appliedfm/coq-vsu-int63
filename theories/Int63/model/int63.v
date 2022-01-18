@@ -1,57 +1,45 @@
-From VST Require Import floyd.proofauto.
+From Coq Require Import micromega.Lia.
+From Coq Require Import ZArith.ZArith.
 
+Local Open Scope Z.
 
-Definition encode_Z (x: Z): Z := x * 2 + 1.
+Definition encode_Z (z: Z): Z := z * 2 + 1.
 
-Module encode_Z.
-    Definition min_signed: Z := - 2^62.
-    Definition max_signed: Z := 2^62 - 1.
+Lemma encode_Z__bitwise (x: Z):
+    encode_Z x = Z.lor 1 (Z.shiftl x 1).
+Proof.
+    unfold encode_Z.
+    rewrite Z.shiftl_mul_pow2 ; try lia.
+    change (2^1) with 2.
+    replace (x * 2) with (2 * x) by lia.
+    replace (2 * x + 1) with (1 + 2 * x) by lia.
+    now destruct x as [|x'|[x'|x'|]].
+Qed.
 
-    Lemma bound_iff (x: Z):
-        Int64.min_signed <= encode_Z x <= Int64.max_signed <-> min_signed <= x <= max_signed.
-    Proof.
-        unfold encode_Z.
-        unfold min_signed.
-        unfold max_signed.
-        assert (E: Int64.min_signed = - 2^63). { reflexivity. } rewrite E in * ; clear E.
-        assert (E: Int64.max_signed = 2^63 - 1). { reflexivity. } rewrite E in * ; clear E.
-        constructor ; lia.
-    Qed.
+Lemma encode_Z__odd (z: Z):
+    Z.odd (encode_Z z) = true.
+Proof.
+    unfold encode_Z.
+    replace (z * 2 + 1) with (1 + 2 * z) by lia.
+    now rewrite Z.odd_add_mul_2.
+Qed.
 
-    Lemma bitwise (x: Z):
-        encode_Z x = Z.lor 1 (Z.shiftl x 1).
-    Proof.
-        unfold encode_Z.
-        rewrite Z.shiftl_mul_pow2 ; try lia.
-        assert (E: 2 ^ 1 = 2). { lia. } rewrite E ; clear E.
-        assert (E: x * 2 = 2 * x). { lia. } repeat rewrite E ; clear E.
-        assert (E: 2 * x + 1 = 1 + 2 * x). { lia. } repeat rewrite E ; clear E.
-        destruct x as [ | x' | x' ] ; try reflexivity.
-        destruct x' ; try reflexivity.
-    Qed.
+Lemma encode_Z__bounds (b z: Z) (Hb: 0 <= b):
+    (- 2^(b + 1) <= encode_Z z <= 2^(b + 1) - 1) <-> (- 2^b <= z <= 2^b - 1).
+Proof.
+    unfold encode_Z.
+    rewrite (Z.pow_add_r 2 b 1) ; try lia.
+Qed.
 
-    Lemma bound (x: Z) (H: Int64.min_signed <= encode_Z x <= Int64.max_signed):
-        Int64.min_signed <= x <= Int64.max_signed.
-    Proof.
-        unfold encode_Z in *.
-        unfold Int64.min_signed in *.
-        unfold Int64.max_signed in *.
-        constructor ; try lia.
-    Qed.
-
-    Lemma tight_bound (x: Z) (Hx: Int64.min_signed <= encode_Z x <= Int64.max_signed):
-        Int64.min_signed < encode_Z x <= Int64.max_signed.
-    Proof.
-        constructor ; try lia.
-
-        destruct Hx as [ Hx_l Hx_h ]. clear Hx_h.
-        assert (Hx_l': Int64.min_signed < encode_Z x \/ Int64.min_signed = encode_Z x). { lia. } clear Hx_l. rename Hx_l' into Hx_l.
-        destruct Hx_l as [ Hx_l | Hx_l ] ; try assumption.
-        unfold encode_Z in *.
-
-        assert (E: x * 2 + 1 = 1 + 2 * x). { lia. } rewrite E in * ; clear E.
-        assert (F: Z.even Int64.min_signed = Z.even (1 + 2 * x)). {  congruence. } clear Hx_l.
-        rewrite Z.even_add_mul_2 in F.
-        inversion F.
-    Qed.
-End encode_Z.
+Lemma encode_Z__tight_lower_bound (b z: Z) (Hb: 1 <= b) (Hz: - 2^b <= encode_Z z):
+    - 2^b < encode_Z z.
+Proof.
+    apply Zle_lt_or_eq in Hz.
+    destruct Hz as [Hz|F]; try lia.
+    exfalso.
+    apply (f_equal Z.odd) in F.
+    rewrite encode_Z__odd in F by lia.
+    rewrite Z.odd_opp in F.
+    rewrite Z.odd_pow in F by lia.
+    inversion F.
+Qed.
