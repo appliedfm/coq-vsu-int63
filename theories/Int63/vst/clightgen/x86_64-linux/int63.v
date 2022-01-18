@@ -722,6 +722,6 @@ Definition prog : Clight.program :=
 (*
 Input hashes (sha256):
 
-a45642c62490c53adf82ceaac62eb109a90857bef237d2335b733d666018accd  src/c/include/coq-vsu-int63/src/int63.c
-821b3952f2f106ef9d453562b04fa9bc810960deb1f9609be28504fee2630379  src/c/include/coq-vsu-int63/int63.h
+6384c2c380f1485909c0e4a6f7db5b14f6a112185e0323b09effcfe61c1094db  src/c/include/coq-vsu-int63/src/int63.c
+668a088deb9dd3b3be2fd3ed43c435edd4eb6dc73725581b8198e29ced6ac91d  src/c/include/coq-vsu-int63/int63.h
 *)

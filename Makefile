@@ -25,13 +25,13 @@ VSUTOOL?=vsu
 
 
 VSU_INCLUDE_DIR=$(shell $(VSUTOOL) -I)
+CLIGHTGEN64?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert/clightgen)
+CLIGHTGEN32?=$(shell $(VSUTOOL) --show-compcert-tool-path=coq-compcert-32/clightgen)
+
 
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 COQLIBINSTALL=$(COQLIB)/user-contrib
 COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
-
-CLIGHTGEN64?=$(COQLIB)/../../bin/clightgen
-CLIGHTGEN32?=$(COQLIB)/../../variants/compcert32/bin/clightgen
 
 TARGET=x86_64-linux
 
@@ -40,8 +40,8 @@ else ifeq ($(BITSIZE),32)
 	TARGET=x86_32-linux
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
 	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32
-	COMPCERT_DIR=$(COQLIB)/../coq-variant/compcert32/compcert
-	VST_DIR=$(COQLIB)/../coq-variant/VST32/VST
+	COMPCERT_DIR=$(shell $(VSUTOOL) --show-coq-variant-path=coq-compcert-32)
+	VST_DIR=$(shell $(VSUTOOL) --show-coq-variant-path=coq-vst-32)
 endif
 
 
