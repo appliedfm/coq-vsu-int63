@@ -8,6 +8,15 @@ Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq.
 
 Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/). Compatible with [CompCert](https://compcert.org/).
 
+
+## Verification status
+
+Specifications are proven respect for the following targets:
+
+- [x] `x86_64-linux`
+- [x] `x86_32-linux`
+
+
 ## Packages
 
 * `coq-vsu-int63-src` - C source code
