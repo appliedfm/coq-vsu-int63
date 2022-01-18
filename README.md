@@ -13,7 +13,7 @@ Powered by [Coq](https://coq.inria.fr) and [VST](https://vst.cs.princeton.edu/).
 
 ## Verification status
 
-Specifications are proven respect for the following targets:
+Specifications are proven correct for the following targets:
 
 - [x] `x86_64-linux`
 - [x] `x86_32-linux`
