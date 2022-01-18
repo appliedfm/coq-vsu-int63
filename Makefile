@@ -37,7 +37,7 @@ VST_PACKAGE=coq-vst
 COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 
 COQLIBINSTALL=$(COQLIB)/user-contrib
-COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)
+COQ_INSTALL_DIR?=$(COQLIBINSTALL)/$(PUBLISHER)/$(PROJECT)
 
 ifeq ($(BITSIZE),64) # This is an alias for BITSIZE=opam
 else ifeq ($(BITSIZE),32)
@@ -45,7 +45,7 @@ else ifeq ($(BITSIZE),32)
 	COMPCERT_PACKAGE=coq-compcert-32
 	VST_PACKAGE=coq-vst-32
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
-	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32
+	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32/$(PROJECT)
 endif
 
 
@@ -129,20 +129,20 @@ install-src:
 	tree "$(VSU_INCLUDE_DIR)" || true
 
 COQ_SOURCES= \
-	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f2-) \
-	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f2-) \
-	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f2-) \
-	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f2-) \
-	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f2-)
+	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f3-)
 
 COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
 
 install-vst: theories
-	echo "{" > install-meta.json
-	echo "    'coq-path': '$(COQ_INSTALL_DIR)'" >> install-meta.json
-	echo "}" >> install-meta.json
-	install -d `$(VSUTOOL) --show-meta-path`
-	install -m 0644 install-meta.json `$(VSUTOOL) --show-meta-path`/$(PACKAGE_NAME).json
+	@[ -z $(PACKAGE_NAME) ] || echo "{" > install-meta.json
+	@[ -z $(PACKAGE_NAME) ] || echo "    'coq-path': '$(COQ_INSTALL_DIR)'" >> install-meta.json
+	@[ -z $(PACKAGE_NAME) ] || echo "}" >> install-meta.json
+	@[ -z $(PACKAGE_NAME) ] || install -d `$(VSUTOOL) --show-meta-path`
+	@[ -z $(PACKAGE_NAME) ] || install -m 0644 install-meta.json `$(VSUTOOL) --show-meta-path`/$(PACKAGE_NAME).json
 	install -d "$(COQ_INSTALL_DIR)"
 	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
 	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
