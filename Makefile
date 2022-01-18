@@ -54,19 +54,19 @@ endif
 #
 
 ifeq ($(SRC),opam)
-	C_ROOT?=$(VSU_INCLUDE_DIR)
+	C_INCLUDE_PATH?=$(VSU_INCLUDE_DIR)
 else
-	C_ROOT?=src/c/include
+	C_INCLUDE_PATH?=src/c/include
 endif
 
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/int63.v: \
-	$(C_ROOT)/coq-vsu-int63/src/int63.c \
-	$(C_ROOT)/coq-vsu-int63/int63.h
+	$(C_INCLUDE_PATH)/coq-vsu-int63/src/int63.c \
+	$(C_INCLUDE_PATH)/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_32-linux/int63.v: \
-	$(C_ROOT)/coq-vsu-int63/src/int63.c \
-	$(C_ROOT)/coq-vsu-int63/int63.h
+	$(C_INCLUDE_PATH)/coq-vsu-int63/src/int63.c \
+	$(C_INCLUDE_PATH)/coq-vsu-int63/int63.h
 
 theories/$(PROJECT)/vst/clightgen/x86_64-linux/%.v:
 	mkdir -p `dirname $@`
