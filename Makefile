@@ -99,16 +99,16 @@ _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 	echo "# $(TARGET)"                          > $@
 	echo `$(VSUTOOL) -Q $(COMPCERT_PACKAGE)`    >> $@
 	echo `$(VSUTOOL) -Q $(VST_PACKAGE)`         >> $@
-	[ -z $(SKIP_MODEL) ] || echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
-	[ -z $(SKIP_MODEL) ] || find     theories/$(PROJECT)/model                     -name "*.v"                              >> $@
-	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
-	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v"                              >> $@
-	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
-	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v"                              >> $@
-	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
-	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v"                              >> $@
-	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
-	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v"                              >> $@
+	[ -n $(SKIP_MODEL) ] || echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
+	[ -n $(SKIP_MODEL) ] || find     theories/$(PROJECT)/model                     -name "*.v"                              >> $@
+	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
+	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v"                              >> $@
+	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
+	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v"                              >> $@
+	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
+	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v"                              >> $@
+	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
+	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v"                              >> $@
 
 
 Makefile.coq: Makefile _CoqProject
