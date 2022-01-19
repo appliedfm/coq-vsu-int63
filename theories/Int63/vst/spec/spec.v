@@ -1,6 +1,7 @@
-From appliedfm Require Import Int63.model.int63.
-From appliedfm Require Import Int63.vst.ast.ast.
 From VST Require Import floyd.proofauto.
+
+From appliedfm Require Import Int63.model.int63.
+From appliedfm Require Import Int63.vst.clightgen.int63.
 
 
 Definition encode_int63_spec: ident * funspec :=

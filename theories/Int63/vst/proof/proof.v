@@ -1,8 +1,9 @@
+From VST Require Import floyd.proofauto.
+
 From appliedfm Require Import Int63.model.int63.
 From appliedfm Require Import Int63.vst.ast.ast.
+From appliedfm Require Import Int63.vst.clightgen.int63.
 From appliedfm Require Import Int63.vst.spec.spec.
-
-From VST Require Import floyd.proofauto.
 
 
 Module Facts.
