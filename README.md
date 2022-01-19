@@ -25,9 +25,10 @@ Proofs are checked by our [CI infrastructure](https://github.com/appliedfm/coq-v
 
 ## Packages
 
+* `coq-int63` - functional model
 * `coq-vsu-int63-src` - C source code
-* `coq-vsu-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
-* `coq-vsu-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-vsu-int63-vst` - VST spec & proof (`x86_64-linux`)
+* `coq-vsu-int63-vst-32` - VST spec & proof (`x86_32-linux`)
 * `coq-vsu-int63` - All of the above
 
 ## Installing
@@ -36,7 +37,7 @@ Installation is performed by `opam` with help by [coq-vsu](https://github.com/ap
 
 ```console
 $ opam pin -n -y .
-$ opam install --working-dir ./coq-vsu-int63.opam
+$ opam install coq-vsu-int63
 ```
 
 ## Using the C library
@@ -57,12 +58,15 @@ $
 
 ## Using the Coq library
 
-We currently publish two Coq libraries:
+We currently publish three Coq libraries:
 
-* `coq-vsu-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
-* `coq-vsu-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+* `coq-int63` - functional model
+* `coq-vsu-int63-vst` - VST spec & proof (`x86_64-linux`)
+* `coq-vsu-int63-vst-32` - VST spec & proof (`x86_32-linux`)
 
-These libraries are installed to the paths given by `vsu --show-coq-variant-path=PACKAGE`. For example:
+The `coq-int63` library is target-agnostic and is therefore always installed into a location within Coq's search path.
+
+However, `coq-vsu-int63-vst` and `coq-vsu-int63-vst-32` are both target-specific. As such, they are sometimes installed into locations outside of Coq's search path. Fortunately, these libraries can be found by calling `vsu --show-coq-variant-path=PACKAGE`. For example:
 
 ```console
 $ echo `vsu --show-coq-variant-path=coq-vsu-int63-vst-32`
@@ -70,7 +74,7 @@ $ echo `vsu --show-coq-variant-path=coq-vsu-int63-vst-32`
 $
 ```
 
-The `vsu` tool can also be used to supply Coq with the correct arguments for importing the library. For example:
+The `vsu` tool can also be used to supply Coq with the correct arguments for importing the target-specific libraries. For example:
 
 ```
 $ tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ coqtop \

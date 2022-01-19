@@ -1,4 +1,4 @@
-.PHONY: all theories clightgen install clean deepclean
+.PHONY: all theories clightgen clean deepclean
 
 all: theories
 
@@ -30,6 +30,7 @@ CLIGHTGEN32?=$(shell $(VSUTOOL) --show-tool-path=coq-compcert-32/clightgen)
 
 
 TARGET=x86_64-linux
+VARIANT=
 COMPCERT_PACKAGE=coq-compcert
 VST_PACKAGE=coq-vst
 
@@ -45,9 +46,16 @@ else ifeq ($(BITSIZE),32)
 	COMPCERT_PACKAGE=coq-compcert-32
 	VST_PACKAGE=coq-vst-32
 	COQLIBINSTALL=$(COQLIB)/../coq-variant
-	COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/32/$(PROJECT)
+	VARIANT=32/
 endif
 
+ifeq ($(SUBPROJECT),model)
+	SKIP_VST=1
+else ifeq ($(SUBPROJECT),vst)
+	SKIP_MODEL=1
+endif
+
+COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/$(VARIANT)$(PROJECT)
 
 #
 # clightgen
@@ -91,16 +99,16 @@ _CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 	echo "# $(TARGET)"                          > $@
 	echo `$(VSUTOOL) -Q $(COMPCERT_PACKAGE)`    >> $@
 	echo `$(VSUTOOL) -Q $(VST_PACKAGE)`         >> $@
-	echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
-	echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
-	echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
-	echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
-	echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
-	find     theories/$(PROJECT)/model                     -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/ast                   -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/proof                 -name "*.v" | cut -d'/' -f1-             >> $@
-	find     theories/$(PROJECT)/vst/spec                  -name "*.v" | cut -d'/' -f1-             >> $@
+	[ -z $(SKIP_MODEL) ] || echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
+	[ -z $(SKIP_MODEL) ] || find     theories/$(PROJECT)/model                     -name "*.v"                              >> $@
+	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
+	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v"                              >> $@
+	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
+	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v"                              >> $@
+	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
+	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v"                              >> $@
+	[ -z $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
+	[ -z $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v"                              >> $@
 
 
 Makefile.coq: Makefile _CoqProject
@@ -127,14 +135,24 @@ install-src:
 	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(VSU_INCLUDE_DIR)/$$(dirname $$f)"; done
 	tree "$(VSU_INCLUDE_DIR)" || true
 
-COQ_SOURCES= \
-	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-) \
+COQ_SOURCES_MODEL= \
+	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-)
+
+COQ_COMPILED_MODEL=$(COQ_SOURCES_MODEL:%.v=%.vo)
+
+install-model: theories
+	install -d "$(COQ_INSTALL_DIR)"
+	for d in $(sort $(dir $(COQ_SOURCES_MODEL) $(COQ_COMPILED_MODEL))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
+	for f in $(COQ_SOURCES_MODEL) $(COQ_COMPILED_MODEL); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
+	tree "$(COQ_INSTALL_DIR)" || true
+
+COQ_SOURCES_VST= \
 	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f3-) \
 	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | cut -d'/' -f3-) \
 	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | cut -d'/' -f3-) \
 	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | cut -d'/' -f3-)
 
-COQ_COMPILED=$(COQ_SOURCES:%.v=%.vo)
+COQ_COMPILED_VST=$(COQ_SOURCES_VST:%.v=%.vo)
 
 install-vst: theories
 	[ -z $(PACKAGE_NAME) ] || echo "{" > install-meta.json
@@ -144,13 +162,11 @@ install-vst: theories
 	[ -z $(PACKAGE_NAME) ] || install -d `$(VSUTOOL) --show-unit-metadata-path`
 	[ -z $(PACKAGE_NAME) ] || install -m 0644 install-meta.json `$(VSUTOOL) --show-unit-metadata-path`/$(PACKAGE_NAME).json
 	install -d "$(COQ_INSTALL_DIR)"
-	for d in $(sort $(dir $(COQ_SOURCES) $(COQ_COMPILED))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
-	for f in $(COQ_SOURCES) $(COQ_COMPILED); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
+	for d in $(sort $(dir $(COQ_COMPILED_VST) $(COQ_COMPILED_VST))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
+	for f in $(COQ_COMPILED_VST) $(COQ_COMPILED_VST); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 	mv    $(COQ_INSTALL_DIR)/vst/clightgen/$(TARGET)/* $(COQ_INSTALL_DIR)/vst/clightgen/
 	rmdir $(COQ_INSTALL_DIR)/vst/clightgen/$(TARGET)
 	tree "$(COQ_INSTALL_DIR)" || true
-
-install: install-src install-vst
 
 
 #

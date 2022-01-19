@@ -19,6 +19,7 @@ depends: [
     "coq-compcert-32" {>= "3.9"}
     "coq-vst-32" {>= "2.8"}
     "coq-vsu"
+    "coq-int63" {= version}
     "coq-vsu-int63-src" {= version}
 ]
 synopsis: "Formally verified 63-bit integer arithmetic, implemented in C and proven in Coq"
