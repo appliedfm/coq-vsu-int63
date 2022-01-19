@@ -12,7 +12,7 @@ build: [
     [make "SUBPROJECT=model" "J=%{jobs}%"]
 ]
 install: [
-    make "install-model"
+    make "SUBPROJECT=model" "install-model"
 ]
 depends: [
     "coq-vsu"

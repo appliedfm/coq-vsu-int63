@@ -9,10 +9,10 @@ license: "https://github.com/appliedfm/coq-vsu-int63/blob/main/LICENSE"
 authors: ["Tim Carstens" "appliedfm"]
 build: [
     [make "verydeepclean"]
-    [make "BITSIZE=64" "SRC=opam" "PACKAGE_NAME=coq-vsu-int63-vst" "J=%{jobs}%"]
+    [make "BITSIZE=64" "SRC=opam" "PACKAGE_NAME=coq-vsu-int63-vst" "SUBPROJECT=vst" "J=%{jobs}%"]
 ]
 install: [
-    make "BITSIZE=64" "SRC=opam" "PACKAGE_NAME=coq-vsu-int63-vst" "install-vst"
+    make "BITSIZE=64" "SRC=opam" "PACKAGE_NAME=coq-vsu-int63-vst" "SUBPROJECT=vst" "install-vst"
 ]
 depends: [
     "coq" {>= "8.13.2"}
