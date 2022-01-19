@@ -128,7 +128,8 @@ theories: Makefile.coq
 # install
 #
 
-.PHONY: install install-src install-vst
+.PHONY: install install-src install-model install-vst
+
 
 C_SOURCES= \
 	$(shell find src/c/include -name "*.c" | cut -d'/' -f4-) \
@@ -140,6 +141,7 @@ install-src:
 	for f in $(C_SOURCES); do install -m 0644 src/c/include/$$f "$(VSU_INCLUDE_DIR)/$$(dirname $$f)"; done
 	tree "$(VSU_INCLUDE_DIR)" || true
 
+
 COQ_SOURCES_MODEL= \
 	$(shell find theories/$(PROJECT)/model                      -name "*.v" | cut -d'/' -f3-)
 
@@ -150,6 +152,7 @@ install-model: theories
 	for d in $(sort $(dir $(COQ_SOURCES_MODEL) $(COQ_COMPILED_MODEL))); do install -d "$(COQ_INSTALL_DIR)/$$d"; done
 	for f in $(COQ_SOURCES_MODEL) $(COQ_COMPILED_MODEL); do install -m 0644 theories/$(PROJECT)/$$f "$(COQ_INSTALL_DIR)/$$(dirname $$f)"; done
 	tree "$(COQ_INSTALL_DIR)" || true
+
 
 COQ_SOURCES_VST= \
 	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | cut -d'/' -f3-) \
