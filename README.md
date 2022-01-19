@@ -55,6 +55,52 @@ $ tree `vsu -I`
 $
 ```
 
+## Using the Coq library
+
+We currently publish two Coq libraries:
+
+* `coq-vsu-int63-vst` - VST model, spec, and proof (`x86_64-linux`)
+* `coq-vsu-int63-vst-32` - VST model, spec, and proof (`x86_32-linux`)
+
+These libraries are installed to the paths given by `vsu --show-coq-variant-path=PACKAGE`. For example:
+
+```console
+$ echo `vsu --show-coq-variant-path=coq-vsu-int63-vst-32`
+/home/tcarstens/.opam/coq-8.14/lib/coq/../coq-variant/appliedfm/32/Int63
+$
+```
+
+The `vsu` tool can also be used to supply Coq with the correct arguments for importing the library. For example:
+
+```
+$ tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ coqtop \
+    `vsu -Q coq-vsu-int63-vst-32` \
+    `vsu -Q coq-compcert-32` \
+    `vsu -Q coq-vst-32`
+Welcome to Coq 8.14.0
+
+Coq < From appliedfm Require Import Int63.vst.spec.spec.
+[Loading ML file ring_plugin.cmxs ... done]
+[Loading ML file zify_plugin.cmxs ... done]
+[Loading ML file micromega_plugin.cmxs ... done]
+[Loading ML file extraction_plugin.cmxs ... done]
+[Loading ML file funind_plugin.cmxs ... done]
+
+Coq < From appliedfm Require Import Int63.vst.proof.proof.
+
+Coq < Check encode_int63_spec.
+encode_int63_spec
+     : AST.ident * mpred.funspec
+
+Coq < Check encode_int63_body.
+encode_int63_body
+     : SeparationLogicAsLogicSoundness.MainTheorem.CSHL_PracticalLogic.CSHL_MinimumLogic.CSHL_Defs.semax_body
+         ast.Vprog ASI int63.f_encode_int63 encode_int63_spec
+
+Coq < 
+```
+
+
 ## Building without `opam`
 
 The general pattern looks like this:
