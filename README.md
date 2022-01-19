@@ -80,11 +80,6 @@ $ tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ coqtop \
 Welcome to Coq 8.14.0
 
 Coq < From appliedfm Require Import Int63.vst.spec.spec.
-[Loading ML file ring_plugin.cmxs ... done]
-[Loading ML file zify_plugin.cmxs ... done]
-[Loading ML file micromega_plugin.cmxs ... done]
-[Loading ML file extraction_plugin.cmxs ... done]
-[Loading ML file funind_plugin.cmxs ... done]
 
 Coq < From appliedfm Require Import Int63.vst.proof.proof.
 
