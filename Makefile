@@ -49,8 +49,11 @@ else ifeq ($(BITSIZE),32)
 	VARIANT=32/
 endif
 
+CLIGHT_TARGETS=theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
+
 ifeq ($(SUBPROJECT),model)
 	SKIP_VST=1
+	CLIGHT_TARGETS=
 else ifeq ($(SUBPROJECT),vst)
 	SKIP_MODEL=1
 endif
@@ -95,20 +98,20 @@ clightgen: \
 # theories
 #
 
-_CoqProject: theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
+_CoqProject: $(CLIGHT_TARGETS)
 	echo "# $(TARGET)"                          > $@
 	echo `$(VSUTOOL) -Q $(COMPCERT_PACKAGE)`    >> $@
 	echo `$(VSUTOOL) -Q $(VST_PACKAGE)`         >> $@
-	[ -n $(SKIP_MODEL) ] || echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
-	[ -n $(SKIP_MODEL) ] || find     theories/$(PROJECT)/model                     -name "*.v"                              >> $@
-	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
-	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v"                              >> $@
-	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
-	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v"                              >> $@
-	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
-	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v"                              >> $@
-	[ -n $(SKIP_VST) ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
-	[ -n $(SKIP_VST) ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v"                              >> $@
+	[ -n "$(SKIP_MODEL)" ] || echo "-Q theories/$(PROJECT)/model                      $(PUBLISHER).$(PROJECT).model"          >> $@
+	[ -n "$(SKIP_MODEL)" ] || find     theories/$(PROJECT)/model                     -name "*.v"                              >> $@
+	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/ast                    $(PUBLISHER).$(PROJECT).vst.ast"        >> $@
+	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v"                              >> $@
+	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
+	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v"                              >> $@
+	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
+	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v"                              >> $@
+	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
+	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v"                              >> $@
 
 
 Makefile.coq: Makefile _CoqProject
