@@ -83,18 +83,19 @@ $ tcarstens@pop-os:~/formal_methods/coq-vsu-int63$ coqtop \
     `vsu -Q coq-vst-32`
 Welcome to Coq 8.14.0
 
+Coq < From VST Require Import floyd.proofauto.
+
 Coq < From appliedfm Require Import Int63.vst.spec.spec.
 
 Coq < From appliedfm Require Import Int63.vst.proof.proof.
 
 Coq < Check encode_int63_spec.
 encode_int63_spec
-     : AST.ident * mpred.funspec
+     : ident * funspec
 
 Coq < Check encode_int63_body.
 encode_int63_body
-     : SeparationLogicAsLogicSoundness.MainTheorem.CSHL_PracticalLogic.CSHL_MinimumLogic.CSHL_Defs.semax_body
-         ast.Vprog ASI int63.f_encode_int63 encode_int63_spec
+     : semax_body ast.Vprog ASI int63.f_encode_int63 encode_int63_spec
 
 Coq < 
 ```
