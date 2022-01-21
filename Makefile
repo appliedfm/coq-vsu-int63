@@ -50,16 +50,15 @@ else ifeq ($(BITSIZE),32)
 endif
 
 
+COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/$(VARIANT)$(PROJECT)
+CLIGHT_TARGETS=theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
+
 ifeq ($(SUBPROJECT),model)
 	SKIP_VST=1
 	CLIGHT_TARGETS=
 else ifeq ($(SUBPROJECT),vst)
 	SKIP_MODEL=1
 endif
-
-
-COQ_INSTALL_DIR=$(COQLIBINSTALL)/$(PUBLISHER)/$(VARIANT)$(PROJECT)
-CLIGHT_TARGETS=theories/$(PROJECT)/vst/clightgen/$(TARGET)/int63.v
 
 
 #
