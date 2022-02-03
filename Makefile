@@ -109,8 +109,8 @@ _CoqProject: $(CLIGHT_TARGETS)
 	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/ast                   -name "*.v" | sort                       >> $@
 	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/clightgen/$(TARGET)    $(PUBLISHER).$(PROJECT).vst.clightgen"  >> $@
 	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/clightgen/$(TARGET)   -name "*.v" | sort                       >> $@
-	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/proof                  $(PUBLISHER).$(PROJECT).vst.proof"      >> $@
-	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/proof                 -name "*.v" | sort                       >> $@
+	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/verif                  $(PUBLISHER).$(PROJECT).vst.verif"      >> $@
+	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/verif                 -name "*.v" | sort                       >> $@
 	[ -n "$(SKIP_VST)" ]   || echo "-Q theories/$(PROJECT)/vst/spec                   $(PUBLISHER).$(PROJECT).vst.spec"       >> $@
 	[ -n "$(SKIP_VST)" ]   || find     theories/$(PROJECT)/vst/spec                  -name "*.v" | sort                       >> $@
 
@@ -156,7 +156,7 @@ install-model: theories
 COQ_SOURCES_VST= \
 	$(shell find theories/$(PROJECT)/vst/ast                    -name "*.v" | sort | cut -d'/' -f3-) \
 	$(shell find theories/$(PROJECT)/vst/clightgen/$(TARGET)    -name "*.v" | sort | cut -d'/' -f3-) \
-	$(shell find theories/$(PROJECT)/vst/proof                  -name "*.v" | sort | cut -d'/' -f3-) \
+	$(shell find theories/$(PROJECT)/vst/verif                  -name "*.v" | sort | cut -d'/' -f3-) \
 	$(shell find theories/$(PROJECT)/vst/spec                   -name "*.v" | sort | cut -d'/' -f3-)
 
 COQ_COMPILED_VST=$(COQ_SOURCES_VST:%.v=%.vo)

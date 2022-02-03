@@ -22,4 +22,4 @@ Coq library
 
 * `Coq model <https://github.com/appliedfm/coq-vsu-int63/blob/main/theories/Int63/model/int63.v>`_
 * `Coq specs <https://github.com/appliedfm/coq-vsu-int63/blob/main/theories/Int63/vst/spec/spec.v>`_
-* `Coq proofs <https://github.com/appliedfm/coq-vsu-int63/blob/main/theories/Int63/vst/proof/proof.v>`_
+* `Coq proofs <https://github.com/appliedfm/coq-vsu-int63/blob/main/theories/Int63/vst/verif/verif.v>`_
