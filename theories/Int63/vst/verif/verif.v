@@ -154,14 +154,14 @@ Module Facts.
 End Facts.
 
 
-Lemma body_encode_int63: semax_body Vprog int63__specs.all f_encode_int63 encode_int63_spec.
+Lemma body_encode_int63: semax_body Vprog int63__specs.gprog f_encode_int63 encode_int63_spec.
   leaf_function.
   start_function.
   repeat forward ; entailer!.
   rewrite Facts.encode_Z_bitwise ; trivial.
 Qed.
 
-Lemma body_decode_int63: semax_body Vprog int63__specs.all f_decode_int63 decode_int63_spec.
+Lemma body_decode_int63: semax_body Vprog int63__specs.gprog f_decode_int63 decode_int63_spec.
   leaf_function.
   start_function.
   repeat forward ; entailer!.
@@ -169,19 +169,19 @@ Lemma body_decode_int63: semax_body Vprog int63__specs.all f_decode_int63 decode
   rewrite Facts.decode_Z_bitwise ; trivial.
 Qed.
 
-Lemma body_int63_zero: semax_body Vprog int63__specs.all f_int63_zero int63_zero_spec.
+Lemma body_int63_zero: semax_body Vprog int63__specs.gprog f_int63_zero int63_zero_spec.
 Proof.
   start_function.
   repeat step.
 Qed.
 
-Lemma body_int63_one: semax_body Vprog int63__specs.all f_int63_one int63_one_spec.
+Lemma body_int63_one: semax_body Vprog int63__specs.gprog f_int63_one int63_one_spec.
 Proof.
   start_function.
   repeat step.
 Qed.
 
-Lemma body_int63_neg: semax_body Vprog int63__specs.all f_int63_neg int63_neg_spec.
+Lemma body_int63_neg: semax_body Vprog int63__specs.gprog f_int63_neg int63_neg_spec.
 Proof.
   start_function.
   repeat step ; entailer!.
@@ -195,7 +195,7 @@ Proof.
   lia.
 Qed.
 
-Lemma body_int63_abs: semax_body Vprog int63__specs.all f_int63_abs int63_abs_spec.
+Lemma body_int63_abs: semax_body Vprog int63__specs.gprog f_int63_abs int63_abs_spec.
 Proof.
   start_function.
   forward_if (PROP () LOCAL (temp _t'1 (Vlong (Int64.repr (encode_Z (Z.abs x))))) SEP ()).
@@ -223,7 +223,7 @@ Proof.
   repeat step.
 Qed.
 
-Lemma body_int63_add: semax_body Vprog int63__specs.all f_int63_add int63_add_spec.
+Lemma body_int63_add: semax_body Vprog int63__specs.gprog f_int63_add int63_add_spec.
 Proof.
   leaf_function.
   start_function.
@@ -239,7 +239,7 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_sub: semax_body Vprog int63__specs.all f_int63_sub int63_sub_spec.
+Lemma body_int63_sub: semax_body Vprog int63__specs.gprog f_int63_sub int63_sub_spec.
 Proof.
   leaf_function.
   start_function.
@@ -264,14 +264,14 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_mul: semax_body Vprog int63__specs.all f_int63_mul int63_mul_spec.
+Lemma body_int63_mul: semax_body Vprog int63__specs.gprog f_int63_mul int63_mul_spec.
 Proof.
   start_function.
   repeat step ; try entailer!.
   repeat rewrite Int64.signed_repr ; apply Facts.encode_Z_bounds ; lia.
 Qed.
 
-Lemma body_int63_div: semax_body Vprog int63__specs.all f_int63_div int63_div_spec.
+Lemma body_int63_div: semax_body Vprog int63__specs.gprog f_int63_div int63_div_spec.
 Proof.
   start_function.
   repeat step ; try entailer!.
@@ -306,7 +306,7 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_rem: semax_body Vprog int63__specs.all f_int63_rem int63_rem_spec.
+Lemma body_int63_rem: semax_body Vprog int63__specs.gprog f_int63_rem int63_rem_spec.
 Proof.
   start_function.
   repeat step ; try entailer!.
@@ -341,7 +341,7 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_shiftl: semax_body Vprog int63__specs.all f_int63_shiftl int63_shiftl_spec.
+Lemma body_int63_shiftl: semax_body Vprog int63__specs.gprog f_int63_shiftl int63_shiftl_spec.
 Proof.
   start_function.
   repeat step ; try entailer!.
@@ -359,7 +359,7 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_shiftr: semax_body Vprog int63__specs.all f_int63_shiftr int63_shiftr_spec.
+Lemma body_int63_shiftr: semax_body Vprog int63__specs.gprog f_int63_shiftr int63_shiftr_spec.
 Proof.
   start_function.
   repeat step ; try entailer!.
@@ -373,7 +373,7 @@ Proof.
   }
 Qed.
 
-Lemma body_int63_or: semax_body Vprog int63__specs.all f_int63_or int63_or_spec.
+Lemma body_int63_or: semax_body Vprog int63__specs.gprog f_int63_or int63_or_spec.
 Proof.
   leaf_function.
   start_function.
@@ -394,7 +394,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma body_int63_and: semax_body Vprog int63__specs.all f_int63_and int63_and_spec.
+Lemma body_int63_and: semax_body Vprog int63__specs.gprog f_int63_and int63_and_spec.
 Proof.
   leaf_function.
   start_function.
@@ -417,7 +417,7 @@ Proof.
   reflexivity.
 Qed.
 
-Lemma body_int63_xor: semax_body Vprog int63__specs.all f_int63_xor int63_xor_spec.
+Lemma body_int63_xor: semax_body Vprog int63__specs.gprog f_int63_xor int63_xor_spec.
 Proof.
   leaf_function.
   start_function.
@@ -437,7 +437,7 @@ Proof.
   destruct i as [ | i' | i' ] ; trivial.
 Qed.
 
-Lemma body_int63_not: semax_body Vprog int63__specs.all f_int63_not int63_not_spec.
+Lemma body_int63_not: semax_body Vprog int63__specs.gprog f_int63_not int63_not_spec.
 Proof.
   leaf_function.
   start_function.

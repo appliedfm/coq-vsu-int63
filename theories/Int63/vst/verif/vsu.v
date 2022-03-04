@@ -7,9 +7,15 @@ From appliedfm Require Import Int63.vst.verif.verif.
 
 #[local] Existing Instance NullExtension.Espec.
 
-Lemma int63__vsu: VSU int63__specs.externs int63__specs.imports ltac:(QPprog prog) int63__specs.exports emp.
+Lemma int63__vsu:
+  VSU
+    int63__specs.externs
+    int63__specs.imports
+    ltac:(QPprog prog)
+    int63__specs.exports
+    emp.
 Proof.
-  mkVSU prog int63__specs.exports.
+  mkVSU prog int63__specs.internals.
   - solve_SF_internal body_decode_int63.
   - solve_SF_internal body_encode_int63.
   - solve_SF_internal body_int63_zero.
