@@ -7,7 +7,8 @@ theories/Int63/model/int63.v
 theories/Int63/vst/ast/ast.v
 -Q theories/Int63/vst/clightgen/x86_64-linux    appliedfm.Int63.vst.clightgen
 theories/Int63/vst/clightgen/x86_64-linux/int63.v
--Q theories/Int63/vst/proof                  appliedfm.Int63.vst.proof
-theories/Int63/vst/proof/proof.v
+-Q theories/Int63/vst/verif                  appliedfm.Int63.vst.verif
+theories/Int63/vst/verif/verif.v
+theories/Int63/vst/verif/vsu.v
 -Q theories/Int63/vst/spec                   appliedfm.Int63.vst.spec
 theories/Int63/vst/spec/spec.v

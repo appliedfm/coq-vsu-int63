@@ -300,23 +300,28 @@ Definition int63_not_spec: ident * funspec :=
       RETURN (Vlong (Int64.repr (encode_Z (Z.lnot x))))
       SEP ( ).
 
-
-Definition ASI: funspecs := [
-  decode_int63_spec;
-  encode_int63_spec;
-  int63_zero_spec;
-  int63_one_spec;
-  int63_neg_spec;
-  int63_abs_spec;
-  int63_add_spec;
-  int63_sub_spec;
-  int63_mul_spec;
-  int63_div_spec;
-  int63_rem_spec;
-  int63_shiftl_spec;
-  int63_shiftr_spec;
-  int63_or_spec;
-  int63_and_spec;
-  int63_xor_spec;
-  int63_not_spec
-].
+Module int63__specs.
+  Definition externs: funspecs := [].
+  Definition imports: funspecs := [].
+  Definition internals: funspecs := [].
+  Definition exports: funspecs := [
+    decode_int63_spec;
+    encode_int63_spec;
+    int63_zero_spec;
+    int63_one_spec;
+    int63_neg_spec;
+    int63_abs_spec;
+    int63_add_spec;
+    int63_sub_spec;
+    int63_mul_spec;
+    int63_div_spec;
+    int63_rem_spec;
+    int63_shiftl_spec;
+    int63_shiftr_spec;
+    int63_or_spec;
+    int63_and_spec;
+    int63_xor_spec;
+    int63_not_spec
+  ].
+  Definition all: funspecs := imports ++ internals ++ exports.
+End int63__specs.
